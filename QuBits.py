@@ -61,11 +61,27 @@ class phaseShift(genericGate):
     """ Implementation of a callable phase-shift gate object """
     def __init__(self, NBits, phi):
         super(phaseShift, self).__init__(NBits)
-        self.matrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
-        m0 = self.matrix
-        
-        for i in range(NBits - 1):
-            self.matrix = np.kron(self.matrix, m0)
+        singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
+        self.matrix = toNBitMatrix(singleMatrix, NBits)
+
+class pauliX(genericGate):
+    def __init__(self, NBits):
+        super(pauliX, self).__init__(NBits)
+        singleMatrix = np.array([[0,1],[1,0]])    
+        self.matrix = toNBitMatrix(singleMatrix, NBits)
+
+class pauliY(genericGate):
+    def __init__(self, NBits):
+        super(pauliY, self).__init__(NBits)
+        singleMatrix = np.array([[0,-1j],[1j,0]])    
+        self.matrix = toNBitMatrix(singleMatrix, NBits) 
+
+class pauliZ(phaseShift):
+    def __init__(self, NBits):
+        super(pauliZ, self).__init__(NBits, np.pi)
+
+
+
 
 def join(regA, regB):
     """ Joins two registers into a single larger register with regA at the MSB and regB at the LSB. """
@@ -73,14 +89,19 @@ def join(regA, regB):
     result.amps = np.kron(regA.amps, regB.amps)    ### Needs more testing
     return result
 
+def toNBitMatrix(m, NBits):
+    """ Takes a single-bit matrix of a gate and returns the NBit equivalent matrix """
+    m0 = m
+    mOut = m
+    for i in range(NBits - 1):
+        mOut = np.kron(mOut, m0)
+    
+    return mOut
 
 
-def pauliZ(reg):
-    return phaseShift(reg, np.pi)
 
 h = hadamard(2)
 r1 = h(register(2))
-r2 = h(register(2))
-p = phaseShift(4,np.pi/5)
+pz = pauliZ(2)
 
-print(p(join(r1,r2)))
+print(pz(r1))
