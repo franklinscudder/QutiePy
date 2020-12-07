@@ -14,6 +14,7 @@ import random
 class register:
     """ An N-bit quantum register object, with 2^N states. """
     def __init__(self, NBits):
+        checkNBits(NBits)
         self.NBits = NBits
         self.NStates = 2 ** NBits
         self.amps = np.zeros(self.NStates, dtype=np.dtype(complex))
@@ -34,17 +35,33 @@ class register:
             stri = stri + f' {amp:.3f}'.rjust(15) + " |" + str(state).ljust(2) + "> +\r\n"
         return stri.rstrip("+\r\n")
     
+    def prod(self, B):
+        """ Returns the tensor product of self and B, 'Joining' two registers into a single larger register with self at the MSB and B at the LSB. """
+        result = register(self.NBits + B.NBits)
+        result.amps = np.kron(self.amps, B.amps)    ### Needs more testing
+        return result
+    
 
 class genericGate:
     """ A base class for callable quantum logic gates. """
     def __init__(self, NBits):
+        checkNBits(NBits)
         self.NBits = NBits
         self.matrix = np.identity(2 ** NBits)
     
     def __call__(self, arg):
-        result = register(arg.NBits)
-        result.amps = np.matmul(self.matrix, arg.amps)
-        return result
+        if issubclass(type(arg), genericGate):
+            out = genericGate(self.NBits + arg.NBits)
+            out.matrix = np.matmul(self.matrix, arg.matrix)
+            return out
+
+        elif type(arg) == register:
+            result = register(arg.NBits)
+            result.amps = np.matmul(self.matrix, arg.matrix)
+            return result
+        
+        else:
+            raise TypeError("Gates can only be called on gates or registers! Got type: " +  str(type(arg)))
     
     def __str__(self):
         stri = str(self.NBits) + "-bit " + type(self).__name__ + " Gate, Matrix:\n\r"
@@ -52,38 +69,53 @@ class genericGate:
         return stri
 
 class hadamard(genericGate):
-    """ Implementation of a callable hadamard gate object """
+    """ Creates a callable hadamard gate object """
     def __init__(self, NBits):
         super(hadamard, self).__init__(NBits)
         self.matrix = sp.hadamard(2 ** NBits) * (2**(-0.5*(NBits)))
 
 class phaseShift(genericGate):
-    """ Implementation of a callable phase-shift gate object """
+    """ Creates a callable phase-shift gate object """
     def __init__(self, NBits, phi):
         super(phaseShift, self).__init__(NBits)
         singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
         self.matrix = toNBitMatrix(singleMatrix, NBits)
 
 class pauliX(genericGate):
+    """ Creates a callable Pauli-X gate object """
     def __init__(self, NBits):
         super(pauliX, self).__init__(NBits)
         singleMatrix = np.array([[0,1],[1,0]])    
         self.matrix = toNBitMatrix(singleMatrix, NBits)
 
 class pauliY(genericGate):
+    """ Creates a callable Pauli-Y gate object """
     def __init__(self, NBits):
         super(pauliY, self).__init__(NBits)
         singleMatrix = np.array([[0,-1j],[1j,0]])    
         self.matrix = toNBitMatrix(singleMatrix, NBits) 
 
 class pauliZ(phaseShift):
+    """ Creates a callable Pauli-Z gate object """
     def __init__(self, NBits):
         super(pauliZ, self).__init__(NBits, np.pi)
 
+class cNot(genericGate):
+    """ Creates Controlled-Not gate object (first bit is the control bit) """
+    def __init__(self):
+        super(cNot, self).__init__(2)   
+        self.matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
+
+def checkNBits(NBits):
+    if NBits < 1:
+        raise ValueError("NBits must be a positive integer!")
+    
+    if type(NBits) != int:
+        raise TypeError("NBits must be a positive integer!")
+    
 
 
-
-def join(regA, regB):
+def prod(regA, regB):
     """ Joins two registers into a single larger register with regA at the MSB and regB at the LSB. """
     result = register(regA.NBits + regB.NBits)
     result.amps = np.kron(regA.amps, regB.amps)    ### Needs more testing
@@ -98,10 +130,10 @@ def toNBitMatrix(m, NBits):
     
     return mOut
 
-
-
 h = hadamard(2)
-r1 = h(register(2))
-pz = pauliZ(2)
+c = cNot()
+p = pauliZ(2)
 
-print(pz(r1))
+print(h)
+print(c(h))
+print(p(c(h)))
