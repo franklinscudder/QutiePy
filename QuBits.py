@@ -8,9 +8,28 @@ import scipy.linalg as sp
 import random
 
 class register:
-    """ An N-bit quantum register object, with 2^N states. """
+    """
+    N-bit quantum register. The initial state is (1+0j)|0>.
+    
+    Parameters
+    ----------
+    NBits : int
+        Size of the register in bits.
+
+    Attributes
+    ----------
+    NBits : int
+        Number of bits in the register.
+    
+    NStates : int
+        Number of states the register can occupy (2^NBits).
+    
+    amps : list
+        The complex probability amplitudes of each state of the register.
+
+    """
     def __init__(self, NBits):
-        checkNBits(NBits)
+        _checkNBits(NBits)
         self.NBits = NBits
         self.NStates = 2 ** NBits
         self.amps = np.zeros(self.NStates, dtype=np.dtype(complex))
@@ -83,7 +102,7 @@ class register:
         for i in idxs:
             theseidxs = idxs.copy()
             theseidxs.remove(i)
-            pt = partial_trace(d, theseidxs , [2]*(self.NBits), True)
+            pt = _partial_trace(d, theseidxs , [2]*(self.NBits), True)
             pt2 = np.matmul(pt,pt)
             purities.append(round(np.trace(pt2),8))
             # round used to reduce precision and remove small errors
@@ -100,9 +119,25 @@ class register:
         self.amps = np.array(amps,  dtype=np.dtype(complex)) / sum(probs)**0.5
 
 class genericGate:
-    """ A base class for callable quantum logic gates. """
+    """
+    Base class for callable quantum logic gates.
+    
+    Parameters
+    ----------
+    NBits : int
+        Size of the registers that the gate will take as input/output.
+
+    Attributes
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    
+    matrix : 2D numpy array
+        The 2^NBits by 2^NBits matrix representation of the gate.
+
+    """
     def __init__(self, NBits):
-        checkNBits(NBits)
+        _checkNBits(NBits)
         self.NBits = NBits
         self.matrix = np.identity(2 ** NBits)
     
@@ -126,44 +161,78 @@ class genericGate:
         return stri
 
 class hadamard(genericGate):
-    """ Create a callable hadamard gate object """
+    """ A callable hadamard gate object. 
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    
+    """
     def __init__(self, NBits):
         super(hadamard, self).__init__(NBits)
         self.matrix = sp.hadamard(2 ** NBits) * (2**(-0.5*(NBits)))
 
 class phaseShift(genericGate):
-    """ Create a callable phase-shift gate object """
+    """ A callable phase-shift gate object. 
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    
+    phi : float
+        The phase angle through which to shift the amplitudes.
+    """
     def __init__(self, NBits, phi):
         super(phaseShift, self).__init__(NBits)
         singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
-        self.matrix = toNBitMatrix(singleMatrix, NBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits)
 
 class pauliX(genericGate):
-    """ Create a callable Pauli-X gate object """
+    """ A callable Pauli-X gate object. 
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    """
     def __init__(self, NBits):
         super(pauliX, self).__init__(NBits)
         singleMatrix = np.array([[0,1],[1,0]])    
-        self.matrix = toNBitMatrix(singleMatrix, NBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits)
 
 class pauliY(genericGate):
-    """ Create a callable Pauli-Y gate object """
+    """ A callable Pauli-Y gate object. 
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    """
     def __init__(self, NBits):
         super(pauliY, self).__init__(NBits)
         singleMatrix = np.array([[0,-1j],[1j,0]])    
-        self.matrix = toNBitMatrix(singleMatrix, NBits) 
+        self.matrix = _toNBitMatrix(singleMatrix, NBits) 
 
 class pauliZ(phaseShift):
-    """ Create a callable Pauli-Z gate object """
+    """ A callable Pauli-Z gate object. 
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    """
     def __init__(self, NBits):
         super(pauliZ, self).__init__(NBits, np.pi)
 
 class cNot(genericGate):
-    """ Create Controlled-Not gate object (first bit is the control bit) """
+    """ A callable Controlled-Not gate object. """ # (first bit is the control bit)
     def __init__(self):
         super(cNot, self).__init__(2)   
         self.matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
 
-def checkNBits(NBits):
+def _checkNBits(NBits):
     """ Validate the NBits input. """
     if NBits < 1:
         raise ValueError("NBits must be a positive integer!")
@@ -179,7 +248,7 @@ def prod(regA, regB):
     result.amps = np.kron(regA.amps, regB.amps)  
     return result
 
-def toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits
+def _toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix """
     m0 = m
     mOut = m
@@ -188,7 +257,7 @@ def toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits
     
     return mOut
 
-def partial_trace(rho, keep, dims, optimize=False):
+def _partial_trace(rho, keep, dims, optimize=False):
     """Calculate the partial trace (Thanks to slek120 on StackExchange)
 
     ρ_a = Tr_b(ρ)
