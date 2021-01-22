@@ -1,11 +1,14 @@
 """
 QuBits.py
 ==========================
-The main file containing all components of QuBits
+The main file containing the core components of QuBits
 """
 import numpy as np
 import scipy.linalg as sp
 import random
+
+
+
 
 class register:
     """
@@ -161,7 +164,7 @@ class register:
         Parameters
         ----------
         amps : iterable
-            The relative complex amplitudes to be applied to the register with normaisation.
+            The relative complex amplitudes to be applied to the register with normalisation.
         """
         if len(amps) != self.NStates:
             raise ValueError("Length of iterable 'amps' must be equal to NStates.")
@@ -169,128 +172,6 @@ class register:
         probs = np.array([abs(i)**2 for i in amps])
         self.amps = np.array(amps,  dtype=np.dtype(complex)) / sum(probs)**0.5
 
-class genericGate:
-    """
-    Base class for callable quantum logic gates.
-    
-    Parameters
-    ----------
-    NBits : int
-        Size of the registers that the gate will take as input/output.
-
-    Attributes
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    
-    matrix : 2D numpy array
-        The 2^NBits by 2^NBits matrix representation of the gate.
-
-    """
-    def __init__(self, NBits):
-        _checkNBits(NBits)
-        self.NBits = NBits
-        self.matrix = np.identity(2 ** NBits)
-    
-    def __call__(self, arg):
-        if issubclass(type(arg), genericGate):
-            out = genericGate(self.NBits + arg.NBits)
-            out.matrix = np.matmul(self.matrix, arg.matrix)
-            return out
-
-        elif type(arg) == register:
-            result = register(arg.NBits)
-            result.amps = np.matmul(self.matrix, arg.amps)
-            return result
-        
-        else:
-            raise TypeError("Gates can only be called on gates or registers! Got type: " +  str(type(arg)))
-    
-    def __str__(self):
-        stri = str(self.NBits) + "-bit " + type(self).__name__ + " Gate, Matrix:\n\r"
-        stri = stri + self.matrix.__str__()
-        return stri
-
-class hadamard(genericGate):
-    """ A callable hadamard gate object. 
-    
-    Parameters
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    
-    """
-    def __init__(self, NBits):
-        super(hadamard, self).__init__(NBits)
-        self.matrix = sp.hadamard(2 ** NBits) * (2**(-0.5*(NBits)))
-
-class phaseShift(genericGate):
-    """ A callable phase-shift gate object. 
-    
-    Parameters
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    
-    phi : float
-        The phase angle through which to shift the amplitudes.
-    """
-    def __init__(self, NBits, phi):
-        super(phaseShift, self).__init__(NBits)
-        singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
-        self.matrix = _toNBitMatrix(singleMatrix, NBits)
-
-class pauliX(genericGate):
-    """ A callable Pauli-X gate object. 
-    
-    Parameters
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    """
-    def __init__(self, NBits):
-        super(pauliX, self).__init__(NBits)
-        singleMatrix = np.array([[0,1],[1,0]])    
-        self.matrix = _toNBitMatrix(singleMatrix, NBits)
-
-class pauliY(genericGate):
-    """ A callable Pauli-Y gate object. 
-    
-    Parameters
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    """
-    def __init__(self, NBits):
-        super(pauliY, self).__init__(NBits)
-        singleMatrix = np.array([[0,-1j],[1j,0]])    
-        self.matrix = _toNBitMatrix(singleMatrix, NBits) 
-
-class pauliZ(phaseShift):
-    """ A callable Pauli-Z gate object. 
-    
-    Parameters
-    ----------
-    NBits : int
-        Number of bits that the gate takes as input/output.
-    """
-    def __init__(self, NBits):
-        super(pauliZ, self).__init__(NBits, np.pi)
-
-class cNot(genericGate):
-    """ A callable Controlled-Not gate object. """ # (first bit is the control bit)
-    def __init__(self):
-        super(cNot, self).__init__(2)   
-        self.matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
-
-def _checkNBits(NBits):
-    """ Validate the NBits input. """
-    if NBits < 1:
-        raise ValueError("NBits must be a positive integer!")
-    
-    if type(NBits) != int:
-        raise TypeError("NBits must be a positive integer!")
-    
 
 
 def prod(regA, regB):
@@ -318,14 +199,6 @@ def prod(regA, regB):
     result.amps = np.kron(regA.amps, regB.amps)  
     return result
 
-def _toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits
-    """ Take a single-bit matrix of a gate and return the NBit equivalent matrix """
-    m0 = m
-    mOut = m
-    for i in range(NBits - 1):
-        mOut = np.kron(mOut, m0)
-    
-    return mOut
 
 def _partial_trace(rho, keep, dims, optimize=False):
     """Calculate the partial trace (Thanks to slek120 on StackExchange)
@@ -362,20 +235,4 @@ def _partial_trace(rho, keep, dims, optimize=False):
     rho_a = np.einsum(rho_a, idx1+idx2, optimize=optimize)
     return rho_a.reshape(Nkeep, Nkeep)
 
-if __name__ == "__main__":
-    b0 = register(1)
-    b1 = register(1)
-    h = hadamard(1)
-    cN = cNot()
-    p = phaseShift(2,2412.134)
-
-    r = p(cN(h(b0).prod(b1)))
-
-
-    print(r.density())
-    print(r.probabilities())
-    print(r.reducedPurities())
-    print(r)
-    print(r.observe())
-    print(r)
-
+from .gates import _checkNBits
