@@ -1,7 +1,7 @@
 """
-QuBits.py
+QutiePy.py
 ==========================
-The main file containing the core components of QuBits
+The main file containing the core components of QutiePy
 """
 import numpy as np
 import scipy.linalg as sp
