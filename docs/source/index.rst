@@ -10,8 +10,8 @@ and a working knowledge of pythonic OOP.
 
 The Register Class
 ==================================
-.. currentmodule:: QutiePy.main
-.. autoclass:: register
+
+.. autoclass:: QutiePy.main.register
    :members:
    :inherited-members:
    :show-inheritance:
