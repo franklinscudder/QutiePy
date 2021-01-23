@@ -73,7 +73,7 @@ class register:
     def __str__(self):
         stri = ""
         for state, amp in enumerate(self.amps):
-            stri = stri + f' {amp:.3f}'.rjust(15) + " |" + str(state).ljust(2) + "> +\r\n"
+            stri = stri + f" {amp:.3f}".rjust(15) + " |" + str(state).ljust(2) + "> +\r\n"
         return stri.rstrip("+\r\n")
     
     def prod(self, B):

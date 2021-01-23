@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('..\..'))
 print(os.path.abspath('..'))
 
 
@@ -23,7 +23,7 @@ copyright = '2021, T. E. L. Findlay'
 author = 'T. E. L. Findlay'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '0.1.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -43,7 +43,7 @@ exclude_patterns = []
 
 
 autodoc_default_options = {'inherited-members': True, 'member-order':'groupwise'}
-
+master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
 
