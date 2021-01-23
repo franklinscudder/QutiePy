@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to QuBits’s documentation! &#8212; QuBits 0.1.0 documentation</title>
+    <title>Welcome to QutiePy’s documentation! &#8212; QutiePy 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -26,8 +26,8 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">QuBits 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to QuBits’s documentation!</a></li> 
+        <li class="nav-item nav-item-0"><a href="#">QutiePy 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to QutiePy’s documentation!</a></li> 
       </ul>
     </div>  
 
@@ -36,17 +36,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-qubits-s-documentation">
-<h1>Welcome to QuBits’s documentation!<a class="headerlink" href="#welcome-to-qubits-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>QuBits is a python3 package designed to provide an easy and practical toolset for simulated quantum computing aimed users with any experience level in quantum theory
+  <div class="section" id="welcome-to-qutiepy-s-documentation">
+<h1>Welcome to QutiePy’s documentation!<a class="headerlink" href="#welcome-to-qutiepy-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>QutiePy is a python3 package designed to provide an easy and practical toolset for simulated quantum computing aimed users with any experience level in quantum theory
 and a working knowledge of pythonic OOP.</p>
-<p><em>QuBits is currently a work-in-progress and is being developed by a first-timer. Please report any issues or suggestions on the GitHub repo at &lt;https://github.com/franklinscudder/QuBits/issues&gt;.</em></p>
+<p><em>QutiePy is currently a work-in-progress and is being developed by a first-timer. Please report any issues or suggestions on the GitHub repo at &lt;https://github.com/franklinscudder/QutiePy/issues&gt;.</em></p>
 </div>
 <div class="section" id="the-register-class">
 <h1>The Register Class<a class="headerlink" href="#the-register-class" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="QuBits.main.register">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.main.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.main.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>N-bit quantum register. The initial state is (1+0j)|0&gt;.</p>
 <dl class="field-list simple">
@@ -55,8 +55,8 @@ and a working knowledge of pythonic OOP.</p>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="QuBits.main.register.NBits">
-<code class="sig-name descname">NBits</code><a class="headerlink" href="#QuBits.main.register.NBits" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.NBits">
+<code class="sig-name descname">NBits</code><a class="headerlink" href="#QutiePy.main.register.NBits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of bits in the register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -66,8 +66,8 @@ and a working knowledge of pythonic OOP.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="QuBits.main.register.NStates">
-<code class="sig-name descname">NStates</code><a class="headerlink" href="#QuBits.main.register.NStates" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.NStates">
+<code class="sig-name descname">NStates</code><a class="headerlink" href="#QutiePy.main.register.NStates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of states the register can occupy (2^NBits).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -77,8 +77,8 @@ and a working knowledge of pythonic OOP.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="QuBits.main.register.amps">
-<code class="sig-name descname">amps</code><a class="headerlink" href="#QuBits.main.register.amps" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.amps">
+<code class="sig-name descname">amps</code><a class="headerlink" href="#QutiePy.main.register.amps" title="Permalink to this definition">¶</a></dt>
 <dd><p>The complex probability amplitudes of each state of the register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -88,8 +88,8 @@ and a working knowledge of pythonic OOP.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.bloch">
-<code class="sig-name descname">bloch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.bloch" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.bloch">
+<code class="sig-name descname">bloch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-12</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.bloch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the angles theta and phi used in the Bloch sphere representation
 of a single qubit register (eps is used to avoid infinite and NaN results,
 set to 0 to disable).</p>
@@ -105,8 +105,8 @@ set to 0 to disable).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.density">
-<code class="sig-name descname">density</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.density" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.density">
+<code class="sig-name descname">density</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.density" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the density matrix of the register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -119,8 +119,8 @@ set to 0 to disable).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.observe">
-<code class="sig-name descname">observe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collapseStates</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.observe" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.observe">
+<code class="sig-name descname">observe</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collapseStates</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.observe" title="Permalink to this definition">¶</a></dt>
 <dd><p>‘Observe’ the register and return an integer representation of the
 observed state according to the probability amplitudes.</p>
 <p>If collapseStates=True, adjust the amplitudes to reflect the collapsed
@@ -136,8 +136,8 @@ state.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.probabilities">
-<code class="sig-name descname">probabilities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.probabilities" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.probabilities">
+<code class="sig-name descname">probabilities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.probabilities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the probability associated with observing each state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -150,33 +150,33 @@ state.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.prod">
-<code class="sig-name descname">prod</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">B</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.prod" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.prod">
+<code class="sig-name descname">prod</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">B</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.prod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tensor product of self and B, ‘Joining’ two registers
 into a single larger register with self at the MSB and ‘B’ at the LSB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>B</strong> (<a class="reference internal" href="#QuBits.main.register" title="QuBits.main.register"><em>register</em></a>) – The register to be appended to self.</p>
+<dd class="field-odd"><p><strong>B</strong> (<a class="reference internal" href="#QutiePy.main.register" title="QutiePy.main.register"><em>register</em></a>) – The register to be appended to self.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>result</strong> – The resulting joined register.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#QuBits.main.register" title="QuBits.main.register">register</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#QutiePy.main.register" title="QutiePy.main.register">register</a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#QuBits.main.register.prod" title="QuBits.main.register.prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prod</span></code></a></dt><dd><p>Equivalent function</p>
+<dt><a class="reference internal" href="#QutiePy.main.register.prod" title="QutiePy.main.register.prod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prod</span></code></a></dt><dd><p>Equivalent function</p>
 </dd>
 </dl>
 </div>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.reducedPurities">
-<code class="sig-name descname">reducedPurities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.reducedPurities" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.reducedPurities">
+<code class="sig-name descname">reducedPurities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.reducedPurities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the reduced purity of each bit of the register, i.e.:
 Tr[Tr_i(D)^2]
 where D is the full density matrix of the register and Tr_i is
@@ -192,8 +192,8 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="QuBits.main.register.setAmps">
-<code class="sig-name descname">setAmps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">amps</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.main.register.setAmps" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.main.register.setAmps">
+<code class="sig-name descname">setAmps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">amps</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.main.register.setAmps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manually set the qubit probability amplitudes in-place, ensuring they remain properly normalised.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -205,18 +205,18 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-QuBits.gates">
-<span id="gate-classes-and-misc-functions"></span><h1>Gate Classes and Misc. Functions<a class="headerlink" href="#module-QuBits.gates" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-QutiePy.gates">
+<span id="gate-classes-and-misc-functions"></span><h1>Gate Classes and Misc. Functions<a class="headerlink" href="#module-QutiePy.gates" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="QuBits.gates.cNot">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">cNot</code><a class="headerlink" href="#QuBits.gates.cNot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.genericGate" title="QuBits.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.genericGate</span></code></a></p>
+<dt id="QutiePy.gates.cNot">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">cNot</code><a class="headerlink" href="#QutiePy.gates.cNot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.genericGate" title="QutiePy.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.genericGate</span></code></a></p>
 <p>A callable CNOT gate object.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.genericGate">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">genericGate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.genericGate" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.gates.genericGate">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">genericGate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.genericGate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for callable quantum logic gates.</p>
 <dl class="field-list simple">
@@ -225,8 +225,8 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt id="QuBits.gates.genericGate.NBits">
-<code class="sig-name descname">NBits</code><a class="headerlink" href="#QuBits.gates.genericGate.NBits" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.gates.genericGate.NBits">
+<code class="sig-name descname">NBits</code><a class="headerlink" href="#QutiePy.gates.genericGate.NBits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of bits that the gate takes as input/output.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -236,8 +236,8 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="QuBits.gates.genericGate.matrix">
-<code class="sig-name descname">matrix</code><a class="headerlink" href="#QuBits.gates.genericGate.matrix" title="Permalink to this definition">¶</a></dt>
+<dt id="QutiePy.gates.genericGate.matrix">
+<code class="sig-name descname">matrix</code><a class="headerlink" href="#QutiePy.gates.genericGate.matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>The 2^NBits by 2^NBits matrix representation of the gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -249,9 +249,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.hadamard">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">hadamard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.hadamard" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.genericGate" title="QuBits.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.genericGate</span></code></a></p>
+<dt id="QutiePy.gates.hadamard">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">hadamard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.hadamard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.genericGate" title="QutiePy.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.genericGate</span></code></a></p>
 <p>A callable hadamard gate object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -261,9 +261,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.pauliX">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">pauliX</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.pauliX" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.genericGate" title="QuBits.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.genericGate</span></code></a></p>
+<dt id="QutiePy.gates.pauliX">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">pauliX</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.pauliX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.genericGate" title="QutiePy.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.genericGate</span></code></a></p>
 <p>A callable Pauli-X gate object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -273,9 +273,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.pauliY">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">pauliY</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.pauliY" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.genericGate" title="QuBits.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.genericGate</span></code></a></p>
+<dt id="QutiePy.gates.pauliY">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">pauliY</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.pauliY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.genericGate" title="QutiePy.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.genericGate</span></code></a></p>
 <p>A callable Pauli-Y gate object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -285,9 +285,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.pauliZ">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">pauliZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.pauliZ" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.phaseShift" title="QuBits.gates.phaseShift"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.phaseShift</span></code></a></p>
+<dt id="QutiePy.gates.pauliZ">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">pauliZ</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.pauliZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.phaseShift" title="QutiePy.gates.phaseShift"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.phaseShift</span></code></a></p>
 <p>A callable Pauli-Z gate object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -297,9 +297,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="QuBits.gates.phaseShift">
-<em class="property">class </em><code class="sig-prename descclassname">QuBits.gates.</code><code class="sig-name descname">phaseShift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em>, <em class="sig-param"><span class="n">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QuBits.gates.phaseShift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#QuBits.gates.genericGate" title="QuBits.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuBits.gates.genericGate</span></code></a></p>
+<dt id="QutiePy.gates.phaseShift">
+<em class="property">class </em><code class="sig-prename descclassname">QutiePy.gates.</code><code class="sig-name descname">phaseShift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">NBits</span></em>, <em class="sig-param"><span class="n">phi</span></em><span class="sig-paren">)</span><a class="headerlink" href="#QutiePy.gates.phaseShift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QutiePy.gates.genericGate" title="QutiePy.gates.genericGate"><code class="xref py py-class docutils literal notranslate"><span class="pre">QutiePy.gates.genericGate</span></code></a></p>
 <p>A callable phase-shift gate object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -331,9 +331,9 @@ the partial trace over the subspace of bit index ‘i’.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to QuBits’s documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to QutiePy’s documentation!</a></li>
 <li><a class="reference internal" href="#the-register-class">The Register Class</a></li>
-<li><a class="reference internal" href="#module-QuBits.gates">Gate Classes and Misc. Functions</a></li>
+<li><a class="reference internal" href="#module-QutiePy.gates">Gate Classes and Misc. Functions</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -367,8 +367,8 @@ the partial trace over the subspace of bit index ‘i’.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">QuBits 0.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to QuBits’s documentation!</a></li> 
+        <li class="nav-item nav-item-0"><a href="#">QutiePy 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to QutiePy’s documentation!</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

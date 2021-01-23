@@ -7,9 +7,8 @@ They are the simplest example of this phenomenon.
 
 Author: T. Findlay, 22/1/21
 """
-import sys
-sys.path.insert(1, r"C:\Users\snick\Documents\PythonDev\QuBits")
-import QuBits as qu
+
+import QutiePy as qu
 
 # Create two 1-qubit registers, initialised to 0 by default
 r1 = qu.register(1)
