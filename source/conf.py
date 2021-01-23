@@ -43,7 +43,7 @@ exclude_patterns = []
 
 
 autodoc_default_options = {'inherited-members': True, 'member-order':'groupwise'}
-master_doc = 'index'
+#master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
 
