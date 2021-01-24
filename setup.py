@@ -8,6 +8,7 @@ setup(
     description='A simple package for learning about and exploring quantum computing.',
     author='T. E. L. Findlay (findlaytel@gmail.com)',
     license='MIT',
+    scripts=['examples\\BellState.py'],
     classifiers= [
             "Development Status :: 2 - Pre-Alpha",
             "Intended Audience :: Education",
