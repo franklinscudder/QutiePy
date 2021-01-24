@@ -1,3 +1,0 @@
-QutiePy
-numpy
-scipy
