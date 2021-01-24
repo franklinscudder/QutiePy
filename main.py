@@ -1,5 +1,5 @@
 """
-QutiePy.main.py
+qutiepy.main.py
 ==========================
 The main file containing the core components of QutiePy
 """

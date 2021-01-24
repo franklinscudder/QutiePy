@@ -1,3 +1,9 @@
+"""
+qutiepy.gates.py
+==========================
+The file containing the gate classes of QutiePy
+"""
+
 import numpy as np
 import scipy.linalg as sp
 
