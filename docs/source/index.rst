@@ -11,7 +11,7 @@ and a working knowledge of pythonic OOP.
 The Register Class
 ==================================
 
-.. autoclass:: main.register
+.. autoclass:: QutiePy.main.register
    :members:
    :inherited-members:
    :show-inheritance:
@@ -19,7 +19,7 @@ The Register Class
 
 Gate Classes and Misc. Functions
 ====================================
-.. automodule:: gates
+.. automodule:: QutiePy.gates
    :members:
    :member-order: bysource
    :show-inheritance:

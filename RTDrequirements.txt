@@ -1,3 +1,0 @@
-QuBits
-numpy
-scipy
