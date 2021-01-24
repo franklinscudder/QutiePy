@@ -24,7 +24,11 @@ copyright = '2021, T. E. L. Findlay'
 author = 'T. E. L. Findlay'
 
 # The full version, including alpha/beta/rc tags
+<<<<<<< Updated upstream
 release = '0.1.2'
+=======
+release = '0.1.3'
+>>>>>>> Stashed changes
 
 
 # -- General configuration ---------------------------------------------------

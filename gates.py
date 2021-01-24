@@ -1,7 +1,11 @@
 """
 qutiepy.gates.py
 ==========================
+<<<<<<< Updated upstream
 The file containing the gate classes of QutiePy
+=======
+The file containing the prebuilt gates of QutiePy.
+>>>>>>> Stashed changes
 """
 
 import numpy as np
