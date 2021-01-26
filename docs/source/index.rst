@@ -12,8 +12,8 @@ and a working knowledge of pythonic OOP.
 
 
 The Register Class, Gate Classes and Misc. Functions
-====================================
-.. automodule:: qutiepy
+=======================================================
+.. automodule:: qutiepy.qutiepy
    :members:
    :member-order: bysource
    :show-inheritance:
