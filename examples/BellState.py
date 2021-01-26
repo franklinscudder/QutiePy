@@ -8,7 +8,7 @@ They are the simplest example of this phenomenon.
 Author: T. Findlay, 22/1/21
 """
 
-import QutiePy as qu
+import qutiepy as qu
 
 # Create two 1-qubit registers, initialised to 0 by default
 r1 = qu.register(1)
