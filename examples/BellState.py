@@ -37,6 +37,6 @@ print()
 print("The reduced purities of each qubit in r (0.5 = maximally entangled, 1 = fully unentangled):")
 print(r.reducedPurities())
 print()
-print("The result of observing ten versions of the Bell state r")
+print("The result of observing ten versions of the Bell state r:")
 for i in range(10):
     print(r.observe(collapseStates=False)),
