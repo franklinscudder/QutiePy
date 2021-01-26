@@ -24,7 +24,7 @@ copyright = '2021, T. E. L. Findlay'
 author = 'T. E. L. Findlay'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.6'
+release = '0.1.8'
 
 
 # -- General configuration ---------------------------------------------------
