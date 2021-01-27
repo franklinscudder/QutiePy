@@ -16,7 +16,7 @@ This script demonstrates the basic usage of the module, constructing the Bell st
 
 *This script can be found in the examples folder.*
 
-```
+```python
 
    import qutiepy as qu
 
