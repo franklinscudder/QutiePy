@@ -65,7 +65,7 @@ class register:
 
         if collapseStates:
             amps = [0]*self.NStates
-            amps[choice] = self.amps[choice]
+            amps[choice] = 1
             self.setAmps(amps)
         
         return choice
