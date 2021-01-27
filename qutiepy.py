@@ -276,6 +276,32 @@ class genericGate:
         stri = str(self.NBits) + "-bit " + type(self).__name__ + " Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
+    
+    def addControlBits(self, NControlBits):
+        """ Add control bits to this single bit gate. 
+    
+        Parameters
+        ----------
+        
+        NControlBits : int
+            The number of control bits to add to the gate.
+    
+        Returns
+        ----------
+        result : bool
+            True if successful.
+        
+        """
+        if self.NBits != 1:
+            raise ValueError("Control bits can only be added to single-bit gates")
+        
+        self.NBits += NControlBits
+        oldMatrix = self.matrix
+        
+        self.matrix = np.eye(2 ** self.NBits)
+        self.matrix[self.NStates-2:self.NStates, self.NStates-2:self.NStates] = oldMatrix
+        
+        return True
 
 class hadamard(genericGate):
     """ A callable hadamard gate object. 
@@ -362,6 +388,23 @@ class ccNot(genericGate):
         super(ccNot, self).__init__(3)
         self.matrix = np.eye(8)
         self.matrix[6:8, 6:8] = np.array([[0,1],[1,0]])
+
+class swap(genericGate):
+    """ A callable SWAP gate object.
+    """
+    def __init__(self):
+        super(swap, self).__init__(2)
+        self.matrix = np.eye(4)
+        self.matrix[1:3, 1:3] = np.array([[0,1],[1,0]])
+
+class sqrtSwap(genericGate):
+    """ A callable sqrt(SWAP) gate object.
+    """
+    def __init__(self):
+        super(sqrtSwap, self).__init__(2)
+        self.matrix = np.eye(4)
+        self.matrix[1:3, 1:3] = np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]])
+    
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """
