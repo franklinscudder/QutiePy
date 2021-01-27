@@ -14,9 +14,9 @@ Usage Example
 
 This script demonstrates the basic usage of the module, constructing the Bell state 'Phi+'. A Bell state is a pair of qubits which exhibit maximal entanglement. They are the simplest example of this phenomenon.
 
-*This script can be found in the examples folder of your package installation.*
+*This script can be found in the examples folder.*
 
-.. code-block:: python
+```
 
    import qutiepy as qu
 
@@ -50,6 +50,7 @@ This script demonstrates the basic usage of the module, constructing the Bell st
    print("The result of observing ten versions of the Bell state r:")
    for i in range(10):
        print(r.observe(collapseStates=False)),
+```
 
 Documentation
 =========================
