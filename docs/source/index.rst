@@ -24,6 +24,7 @@ General Notes and Conventions
 - All gate objects implement a __call__ method and are intended to be applied to a register in this way:
 
 .. code-block:: python
+   
    # A Hadamard gate
    h = hadamard(4)
    
