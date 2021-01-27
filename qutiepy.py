@@ -333,7 +333,7 @@ class phaseShift(genericGate):
         self.matrix = _toNBitMatrix(singleMatrix, NBits)
 
 class pauliX(genericGate):
-    """ A callable Pauli-X gate object. 
+    """ A callable Pauli-X gate object, AKA the quantum NOT gate.
     
     Parameters
     ----------
@@ -390,7 +390,7 @@ class ccNot(genericGate):
         self.matrix[6:8, 6:8] = np.array([[0,1],[1,0]])
 
 class swap(genericGate):
-    """ A callable SWAP gate object.
+    """ A callable SWAP gate object. For two qubits in a register (A,B), outputs (B,A).
     """
     def __init__(self):
         super(swap, self).__init__(2)
@@ -404,6 +404,21 @@ class sqrtSwap(genericGate):
         super(sqrtSwap, self).__init__(2)
         self.matrix = np.eye(4)
         self.matrix[1:3, 1:3] = np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]])
+
+class sqrtNot(genericGate):
+    """ A callable sqrt(not) or sqrt(Pauli-X) gate object.
+    """
+    def __init__(self, NBits):
+        super(sqrtNot, self).__init__(NBits)
+        self.matrix = _toNBitMatrix(np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]]))
+
+class fredkin(genericGate):
+    """ A callable Fredkin (CCSWAP) gate object.
+    """
+    def __init__(self):
+        super(fredkin, self).__init__(3)
+        self.matrix = np.eye(8)
+        self.matrix[5:7,5:7] = np.array([[0,1],[1,0]])
     
 
 def _checkNBits(NBits):
