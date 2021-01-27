@@ -8,7 +8,7 @@ They are the simplest example of this phenomenon.
 Author: T. Findlay, 22/1/21
 """
 
-import QutiePy as qu
+import qutiepy as qu
 
 # Create two 1-qubit registers, initialised to 0 by default
 r1 = qu.register(1)
@@ -37,6 +37,6 @@ print()
 print("The reduced purities of each qubit in r (0.5 = maximally entangled, 1 = fully unentangled):")
 print(r.reducedPurities())
 print()
-print("The result of observing ten versions of the Bell state r")
+print("The result of observing ten versions of the Bell state r:")
 for i in range(10):
     print(r.observe(collapseStates=False)),
