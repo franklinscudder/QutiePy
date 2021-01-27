@@ -346,11 +346,22 @@ class pauliZ(phaseShift):
 class cNot(genericGate):
     """ A callable CNOT gate object. 
     
+    The first bit (LSB) in the register on which this gate is called is the control bit.
     """ 
     
     def __init__(self):     # (first bit is the control bit)
         super(cNot, self).__init__(2)   
         self.matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
+
+class ccNot(genericGate):
+    """ A callable CCNOT (Toffoli) gate object.
+    
+    The first two bits (LSBs) in the register on which this gate is called are the control bits. 
+    """
+    def __init__(self):
+        super(ccNot, self).__init__(3)
+        self.matrix = np.eye(8)
+        self.matrix[6:8, 6:8] = np.array([[0,1],[1,0]])
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """
@@ -368,4 +379,3 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits???
         mOut = np.kron(mOut, m0)
     
     return mOut
- 
