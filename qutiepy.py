@@ -420,7 +420,27 @@ class fredkin(genericGate):
         super(fredkin, self).__init__(3)
         self.matrix = np.eye(8)
         self.matrix[5:7,5:7] = np.array([[0,1],[1,0]])
+
+def setSeed(seed):
+    """ Set the RNG seed for reproducibility.
     
+    Parameters
+    ----------
+    seed : string
+        The seed to be used by the RNG.
+    
+    Returns
+    ----------
+    result : bool
+        True if successful.
+        
+    """
+    
+    if type(seed) != str:
+        raise ValueError("The seed must be a string")
+    
+    random.seed(seed)
+    return True
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """

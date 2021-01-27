@@ -13,6 +13,17 @@ and a working knowledge of pythonic OOP.
 
 The Register Class, Gate Classes and Misc. Functions
 =======================================================
+
+General Notes and Conventions
+----------------------------------
+- reg[0] = LSB
+- first bit control bit
+- camelCase (Ns)
+- printable registers
+- callable gates
+
+
+
 .. automodule:: qutiepy
    :members:
    :member-order: bysource
