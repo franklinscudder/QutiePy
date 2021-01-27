@@ -1,7 +1,8 @@
 """
 qutiepy.py
 ==========================
-The main file containing the core components of QutiePy
+The main file containing the core components of QutiePy, including classes for gates and the register class as well as a 
+few functions which handle on gate and register objects:
 """
 import numpy as np
 import scipy.linalg as sp
