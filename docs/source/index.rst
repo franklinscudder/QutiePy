@@ -11,16 +11,28 @@ and a working knowledge of pythonic OOP.
 *QutiePy is currently a work-in-progress and is being developed by a first-timer. Please report any issues or suggestions on the GitHub repo at <https://github.com/franklinscudder/QutiePy/issues>.*
 
 
-The Register Class, Gate Classes and Misc. Functions
-=======================================================
+Reference
+==============
 
 General Notes and Conventions
 ----------------------------------
-- reg[0] = LSB
-- first bit control bit
-- camelCase (Ns)
-- printable registers
-- callable gates
+- QutiePy assumes that the first bit in a register (reg[0]) is the least significant bit. Thus, if a register is observed as [0,0,1] the resulting output would be 4.
+- For controlled gates, the first bit (LSB) is the control bit.
+- The names used in the package use camelCase as much as possible with the caveat that 'N' as in 'number of' is capitalised and treated as a word itself (NBits, NStates).
+- For a pretty representation of a register, just call print(reg).
+- When calling a gate on a register, the result is returned in a new object, the original register is not modified in any way.
+- All gate objects implement a __call__ method and are intended to be applied to a register in this way:
+
+.. code-block:: python
+   # A Hadamard gate
+   h = hadamard(4)
+   
+   # A 4-bit register
+   r = register(4)
+   
+   # Applying the gate to the register
+   result = h(r)
+   
 
 
 
