@@ -320,7 +320,7 @@ class genericGate:
         return True
 
 class compoundGate(genericGate):
-    """ A class returned when gates are compounded. See genericGate for methods and attributes.
+    """ A class returned when gates are compounded. See genericGate attributes.
     """
     
     
