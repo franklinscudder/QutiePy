@@ -34,7 +34,7 @@ General Notes and Conventions
    # Applying the gate to the register
    result = h(r)
 
-- Gates can be compounded is series as a new object. ```a(b(c))``` will return a compoundGate object if a, b and c are gates.
+- Gates can be compounded is series as a new object. ``a(b(c))`` will return a compoundGate object if a, b and c are gates.
 - If reproducability is required, setSeed() can be used to set the RNG seed to a given string so that each run will produce the same results.
 
 
