@@ -340,11 +340,13 @@ class hadamard(genericGate):
     ----------
     NBits : int
         Number of bits that the gate takes as input/output.
-    
+        
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits):
+    def __init__(self, NBits, skipBits = []):
         super(hadamard, self).__init__(NBits)
-        self.matrix = sp.hadamard(2 ** NBits) * (2**(-0.5*(NBits)))
+        self.matrix = _toNBitMatrix(sp.hadamard(2) * (2**(-0.5)), NBits, skipBits)
 
 class phaseShift(genericGate):
     """ A callable phase-shift gate object. 
@@ -356,11 +358,14 @@ class phaseShift(genericGate):
     
     phi : float
         The phase angle through which to shift the amplitudes.
+        
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits, phi):
+    def __init__(self, NBits, phi, skipBits=[]):
         super(phaseShift, self).__init__(NBits)
         singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
-        self.matrix = _toNBitMatrix(singleMatrix, NBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits)
 
 class pauliX(genericGate):
     """ A callable Pauli-X gate object, AKA the quantum NOT gate.
@@ -369,11 +374,14 @@ class pauliX(genericGate):
     ----------
     NBits : int
         Number of bits that the gate takes as input/output.
+     
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits):
+    def __init__(self, NBits, skipBits=[]):
         super(pauliX, self).__init__(NBits)
         singleMatrix = np.array([[0,1],[1,0]])    
-        self.matrix = _toNBitMatrix(singleMatrix, NBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits)
 
 class pauliY(genericGate):
     """ A callable Pauli-Y gate object. 
@@ -382,11 +390,14 @@ class pauliY(genericGate):
     ----------
     NBits : int
         Number of bits that the gate takes as input/output.
+       
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits):
+    def __init__(self, NBits, skipBits=[]):
         super(pauliY, self).__init__(NBits)
         singleMatrix = np.array([[0,-1j],[1j,0]])    
-        self.matrix = _toNBitMatrix(singleMatrix, NBits) 
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits) 
 
 class pauliZ(phaseShift):
     """ A callable Pauli-Z gate object. 
@@ -395,9 +406,12 @@ class pauliZ(phaseShift):
     ----------
     NBits : int
         Number of bits that the gate takes as input/output.
+       
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits):
-        super(pauliZ, self).__init__(NBits, np.pi)
+    def __init__(self, NBits, skipBits=[]):
+        super(pauliZ, self).__init__(NBits, np.pi, skipBits)
 
 class cNot(genericGate):
     """ A callable CNOT gate object. 
@@ -437,10 +451,18 @@ class sqrtSwap(genericGate):
 
 class sqrtNot(genericGate):
     """ A callable sqrt(not) or sqrt(Pauli-X) gate object.
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+       
+    skipBits : list of int, optional
+        Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, NBits):
+    def __init__(self, NBits, skipBits=[]):
         super(sqrtNot, self).__init__(NBits)
-        self.matrix = _toNBitMatrix(np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]]))
+        self.matrix = _toNBitMatrix(np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]]), NBits, skipBits)
 
 class fredkin(genericGate):
     """ A callable Fredkin (CCSWAP) gate object.
@@ -481,7 +503,7 @@ def _checkNBits(NBits):
 
 def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
-    m0 = m
+    
     I = np.eye(2)
     
     if 0 in skipBits:
@@ -489,17 +511,20 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     else:
         mOut = m
     
-    for i in range(NBits-1):
+    for i in range(1, NBits):
         if i in skipBits:
-            mOut = np.kron(mOut, I)
+            mOut = np.kron(I, mOut)
         else:
-            mOut = np.kron(mOut, m0)
+            mOut = np.kron(m, mOut)
         
             
     
     return mOut
 
-print(_toNBitMatrix(np.array([[0,1],[1,0]]), 2, [1]))
+r = register(4)
+h = hadamard(4)
+h.matrix = _toNBitMatrix(sp.hadamard(2 ** 1) * (2**(-0.5*(1))), 4, [0])
+print(sum([i**2 for i in h(r).amps]))
 
 
 
