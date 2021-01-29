@@ -331,6 +331,7 @@ class compoundGate(genericGate):
         stri = str(self.NBits) + "-qubit Compound Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
+        
 
 class hadamard(genericGate):
     """ A callable hadamard gate object. 
@@ -478,16 +479,27 @@ def _checkNBits(NBits):
     if type(NBits) != int:
         raise TypeError("NBits must be a positive integer!")
 
-def _toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits???
-    """ Take a single-bit matrix of a gate and return the NBit equivalent matrix """
+def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
+    """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
     m0 = m
-    mOut = m
-    for i in range(NBits - 1):
-        mOut = np.kron(mOut, m0)
+    I = np.eye(2)
+    
+    if 0 in skipBits:
+        mOut = I
+    else:
+        mOut = m
+    
+    for i in range(NBits-1):
+        if i in skipBits:
+            mOut = np.kron(mOut, I)
+        else:
+            mOut = np.kron(mOut, m0)
+        
+            
     
     return mOut
 
-
+print(_toNBitMatrix(np.array([[0,1],[1,0]]), 2, [1]))
 
 
 
