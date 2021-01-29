@@ -252,16 +252,23 @@ class genericGate:
     
     matrix : 2D numpy array
         The 2^NBits by 2^NBits matrix representation of the gate.
+    
+    NControlBits : bool
+        Indicates whether a control bit has been added using .addControlBits().
 
     """
     def __init__(self, NBits):
         _checkNBits(NBits)
         self.NBits = NBits
         self.matrix = np.identity(2 ** NBits)
+        self.NControlBits = 0
     
     def __call__(self, arg):
         if issubclass(type(arg), genericGate):
-            out = genericGate(self.NBits + arg.NBits)
+            if arg.NBits != self.NBits:
+                raise ValueError("Gates to be compounded must have the same NBits.")
+            
+            out = compoundGate(self.NBits + arg.NBits)
             out.matrix = np.matmul(self.matrix, arg.matrix)
             return out
 
@@ -274,12 +281,18 @@ class genericGate:
             raise TypeError("Gates can only be called on gates or registers! Got type: " +  str(type(arg)))
     
     def __str__(self):
-        stri = str(self.NBits) + "-bit " + type(self).__name__ + " Gate, Matrix:\n\r"
+        
+        if self.NControlBits:
+            cont =  "(" + str(self.NControlBits)  + " control qubits) "
+        else:
+            cont = ""
+        
+        stri = str(self.NBits) + "-qubit " + cont + type(self).__name__ + " Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
     
     def addControlBits(self, NControlBits):
-        """ Add control bits to this single bit gate. 
+        """ Add control bits to this single bit gate. This is an in-place operation. 
     
         Parameters
         ----------
@@ -297,12 +310,24 @@ class genericGate:
             raise ValueError("Control bits can only be added to single-bit gates")
         
         self.NBits += NControlBits
+        NStates = 2 ** self.NBits
         oldMatrix = self.matrix
         
-        self.matrix = np.eye(2 ** self.NBits)
-        self.matrix[self.NStates-2:self.NStates, self.NStates-2:self.NStates] = oldMatrix
+        self.matrix = np.eye(NStates)
+        self.matrix[NStates-2:NStates, NStates-2:NStates] = oldMatrix
         
+        self.NControlBits = NControlBits
         return True
+
+class compoundGate(genericGate):
+    
+    def __init__(self, NBits):
+        super(compoundGate, self).__init__(NBits)
+    
+    def __str__(self):
+        stri = str(self.NBits) + "-qubit Compound Gate, Matrix:\n\r"
+        stri = stri + self.matrix.__str__()
+        return stri
 
 class hadamard(genericGate):
     """ A callable hadamard gate object. 
@@ -458,3 +483,11 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   # add ability to skip bits???
         mOut = np.kron(mOut, m0)
     
     return mOut
+
+
+
+
+
+
+
+
