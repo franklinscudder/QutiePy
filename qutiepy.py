@@ -320,6 +320,9 @@ class genericGate:
         return True
 
 class compoundGate(genericGate):
+    """ A class returned when gates are compounded. See genericGate for methods and attributes.
+    """
+    
     
     def __init__(self, NBits):
         super(compoundGate, self).__init__(NBits)
