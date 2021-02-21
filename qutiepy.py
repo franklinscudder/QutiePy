@@ -7,6 +7,7 @@ few functions which handle on gate and register objects:
 import numpy as np
 import scipy.linalg as sp
 import random
+import warnings
 
 
 
@@ -500,6 +501,9 @@ def _checkNBits(NBits):
     
     if type(NBits) != int:
         raise TypeError("NBits must be a positive integer!")
+    
+    if NBits > 12:
+        warnings.warn("Using more than ~12 qubits in a gate or register will use a lot of resources and is not recommended!")
 
 def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
