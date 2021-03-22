@@ -50,27 +50,54 @@ class register:
         """
         return np.array([abs(i)**2 for i in self.amps])
     
-    def observe(self, collapseStates=True):
+    def observe(self, bit=-1, collapseStates=True):
         """ 'Observe' the register and return an integer representation of the
             observed state according to the probability amplitudes.
+            
+            If a bit argument is supplied, only that bit will be observed and it's
+            state returned as an integer (1 or 0).
 
             If collapseStates=True, adjust the amplitudes to reflect the collapsed
             state.
             
+            Parameters
+            ----------
+            bit : int, optional
+                The index of the bit to be observed.
+            
+            collapseStates : bool, optional
+                Flag to set whether probability amplitudes will be affected by this
+                observation.
+            
             Returns
             ----------
             state : int
-                The observed state.
+                The observed state of the register or bit.
         """
-        probs = self.probabilities()
-        choice = random.choices(range(self.NStates), probs)[0]
+        if bit == -1:
+            probs = self.probabilities()
+            choice = random.choices(range(self.NStates), probs)[0]
 
-        if collapseStates:
-            amps = [0]*self.NStates
-            amps[choice] = 1
-            self.setAmps(amps)
+            if collapseStates:
+                amps = [0]*self.NStates
+                amps[choice] = 1
+                self.setAmps(amps)
         
-        return choice
+            return choice
+            
+        else:
+            probs = self.probabilities()
+            bitProbs = [sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "0"]), sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "1"])]
+            bitChoice = random.choices([0,1] bitProbs)[0]
+            
+            if collapseStates:
+                amps = self.amps
+                zeroIndices = [i for i in range(sel.NStates) if format(i, f"0{self.NBits}b")[-bit] != str(bitChoice)]
+                for i in zeroIndices:
+                    amps[i] = 0.0+0.0j
+                self.setAmps(amps)
+                
+            return bitChoice
     
     def __str__(self):
         stri = ""
