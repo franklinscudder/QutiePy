@@ -12,7 +12,7 @@ if os.path.isfile(requirementPath):
 setup(
     name='QutiePy',
     py_modules=['qutiepy'],
-    version='0.1.15',
+    version='0.1.16',
     long_description='A WIP package providing a simple OOP framework for simulating quantum computing operations in python, with an emphasis on accessability and simplicity.',
     long_description_content_type="text/markdown",
     install_requires=install_requires,
