@@ -86,13 +86,15 @@ class register:
             return choice
             
         else:
+            if bit > self.NBits - 1:
+                raise IndexError("Value of 'bit' cannot be greater than self.NBits.")
             probs = self.probabilities()
             bitProbs = [sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "0"]), sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "1"])]
             bitChoice = random.choices([0,1], bitProbs)[0]
             
             if collapseStates:
                 amps = self.amps
-                zeroIndices = [i for i in range(sel.NStates) if format(i, f"0{self.NBits}b")[-bit] != str(bitChoice)]
+                zeroIndices = [i for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] != str(bitChoice)]
                 for i in zeroIndices:
                     amps[i] = 0.0+0.0j
                 self.setAmps(amps)
@@ -557,6 +559,7 @@ if __name__ == "__main__":
     h = hadamard(4)
     h.matrix = _toNBitMatrix(sp.hadamard(2 ** 1) * (2**(-0.5*(1))), 4, [0])
     print(sum([i**2 for i in h(r).amps]))
+    print(r.observe(bit=4))
 
 
 
