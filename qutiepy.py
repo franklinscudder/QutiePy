@@ -88,7 +88,7 @@ class register:
         else:
             probs = self.probabilities()
             bitProbs = [sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "0"]), sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "1"])]
-            bitChoice = random.choices([0,1] bitProbs)[0]
+            bitChoice = random.choices([0,1], bitProbs)[0]
             
             if collapseStates:
                 amps = self.amps
@@ -552,10 +552,11 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     
     return mOut
 
-r = register(4)
-h = hadamard(4)
-h.matrix = _toNBitMatrix(sp.hadamard(2 ** 1) * (2**(-0.5*(1))), 4, [0])
-print(sum([i**2 for i in h(r).amps]))
+if __name__ == "__main__":
+    r = register(4)
+    h = hadamard(4)
+    h.matrix = _toNBitMatrix(sp.hadamard(2 ** 1) * (2**(-0.5*(1))), 4, [0])
+    print(sum([i**2 for i in h(r).amps]))
 
 
 
