@@ -298,7 +298,7 @@ class genericGate:
             if arg.NBits != self.NBits:
                 raise ValueError("Gates to be compounded must have the same NBits.")
             
-            out = compoundGate(self.NBits + arg.NBits)
+            out = compoundGate(self.NBits)
             out.matrix = np.matmul(self.matrix, arg.matrix)
             return out
 
@@ -522,6 +522,17 @@ def setSeed(seed):
     
     random.seed(seed)
     return True
+    
+def makeParallelGate(gates):
+    matrix = gates[0].matrix
+    
+    for gate in gates[1:]:
+        matrix = np.kron(matrix, gate.matrix)
+        
+    gate = compoundGate(sum([g.NBits for g in gates]))
+    gate.matrix = matrix
+    
+    return gate
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """
@@ -554,13 +565,23 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     
     return mOut
 
-if __name__ == "__main__":
-    r = register(4)
-    h = hadamard(4)
-    h.matrix = _toNBitMatrix(sp.hadamard(2 ** 1) * (2**(-0.5*(1))), 4, [0])
-    print(sum([i**2 for i in h(r).amps]))
-    print(r.observe(bit=4))
+def _toControlled(gate):
+    rootGate = genericGate(2)
+    rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
+    rootGateT = genericGate(2)
+    rootGateT.matrix = np.kron(np.eye(2), np.array(np.asmatrix(sp.sqrtm(gate.matrix)).H))
+    cn = cNot()
+    controlled = cn(rootGateT(cn(rootGate)))
+    
+    return controlled
 
+if __name__ == "__main__":
+    cn = cNot()
+    n = pauliX(1)
+    mycn = _toControlled(n)
+    mycn.matrix = np.around(mycn.matrix, 2).astype(int)
+    print(cn)
+    print(mycn)
 
 
 
