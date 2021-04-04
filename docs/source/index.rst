@@ -91,8 +91,8 @@ This script demonstrates the basic usage of the module, constructing the Bell st
    for i in range(10):
        print(r.observe(collapseStates=False)),
 
-Entanglement and skipBits
-============================
+Entanglement, Parallel Gates and skipBits
+=================================================
 Entanglement in QutiePy is handled by keeping entangled qubits in the same register as each other. Thus, once registers are combined using ``prod()``, they cannot
 be separated. The best way to apply a gate operation to only some bits in a register, you can use a ```parallelGate``` object composed of any operations you wish to apply to the gate,
 along with identity gates acting on bits you wish to remain unaffected.
