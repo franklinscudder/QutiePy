@@ -371,7 +371,7 @@ class hadamard(genericGate):
     NBits : int
         Number of bits that the gate takes as input/output.
         
-    skipBits : list of int, optional
+    skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
     def __init__(self, NBits, skipBits = []):
@@ -389,7 +389,7 @@ class phaseShift(genericGate):
     phi : float
         The phase angle through which to shift the amplitudes.
         
-    skipBits : list of int, optional
+    skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
     def __init__(self, NBits, phi, skipBits=[]):
@@ -421,7 +421,7 @@ class pauliY(genericGate):
     NBits : int
         Number of bits that the gate takes as input/output.
        
-    skipBits : list of int, optional
+    skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
     def __init__(self, NBits, skipBits=[]):
@@ -437,7 +437,7 @@ class pauliZ(phaseShift):
     NBits : int
         Number of bits that the gate takes as input/output.
        
-    skipBits : list of int, optional
+    skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
     def __init__(self, NBits, skipBits=[]):
@@ -487,7 +487,7 @@ class sqrtNot(genericGate):
     NBits : int
         Number of bits that the gate takes as input/output.
        
-    skipBits : list of int, optional
+    skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
     def __init__(self, NBits, skipBits=[]):
@@ -604,7 +604,7 @@ def _toControlled(gate):    # Not working, addControlBits seems to work.
     return controlled
 
 if __name__ == "__main__":
-    pass
+    print("Why are you running the source file as __main__???")
     
     
     
