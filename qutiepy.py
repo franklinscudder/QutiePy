@@ -501,6 +501,43 @@ class fredkin(genericGate):
         super(fredkin, self).__init__(3)
         self.matrix = np.eye(8)
         self.matrix[5:7,5:7] = np.array([[0,1],[1,0]])
+        
+class identity(genericGate):
+    """ A callable identity gate object.
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    
+    """
+    def __init__(self, NBits):
+        super(identity, self).__init__(NBits)
+        self.matrix = np.eye(2**NBits)
+        
+class parallelGate(genericGate):   # test me
+    """ A gate class to combine gates in parallel.
+    
+    Parameters
+    ----------
+    gates : array of gate objects
+        The gates to be combined in parallel, with the first gate acting on the
+        LSB of an applied register.
+       
+    """
+    def __init__(self, gates):
+        try:
+            self.NBits = sum([g.NBits for g in gates])
+        except:
+            raise TypeError("gates must be an iterable of gate objects.")
+            
+        super(parallelGate, self).__init__(self.NBits)
+        
+        matrix = gates[0].matrix
+        for gate in gates[1:]:
+            matrix = np.kron(matrix, gate.matrix)
+        
+        self.matrix = matrix
 
 def setSeed(seed):
     """ Set the RNG seed for reproducibility.
@@ -523,16 +560,6 @@ def setSeed(seed):
     random.seed(seed)
     return True
     
-def makeParallelGate(gates):
-    matrix = gates[0].matrix
-    
-    for gate in gates[1:]:
-        matrix = np.kron(matrix, gate.matrix)
-        
-    gate = compoundGate(sum([g.NBits for g in gates]))
-    gate.matrix = matrix
-    
-    return gate
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """
@@ -548,6 +575,9 @@ def _checkNBits(NBits):
 def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
     
+    if skipBits != []:
+        raise DeprecationWarning("Using skipBits is no longer recommended, use parallelGate to combine identity gates with your desired operator.")
+            
     I = np.eye(2)
     
     if 0 in skipBits:
@@ -560,12 +590,10 @@ def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
             mOut = np.kron(I, mOut)
         else:
             mOut = np.kron(m, mOut)
-        
-            
-    
+
     return mOut
 
-def _toControlled(gate):
+def _toControlled(gate):    # Not working, addControlBits seems to work.
     rootGate = genericGate(2)
     rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
     rootGateT = genericGate(2)
@@ -576,13 +604,10 @@ def _toControlled(gate):
     return controlled
 
 if __name__ == "__main__":
-    cn = cNot()
-    n = pauliX(1)
-    mycn = _toControlled(n)
-    mycn.matrix = np.around(mycn.matrix, 2).astype(int)
-    print(cn)
-    print(mycn)
-
+    pass
+    
+    
+    
 
 
 
