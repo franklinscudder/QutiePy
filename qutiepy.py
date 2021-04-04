@@ -292,6 +292,7 @@ class genericGate:
         self.NBits = NBits
         self.matrix = np.identity(2 ** NBits)
         self.NControlBits = 0
+        self.isInverse = False
     
     def __call__(self, arg):
         if issubclass(type(arg), genericGate):
@@ -316,10 +317,31 @@ class genericGate:
             cont =  "(" + str(self.NControlBits)  + " control qubits) "
         else:
             cont = ""
+            
+        if self.isInverse:
+            inv = "Inverse "
+        else:
+            inv = ""
         
-        stri = str(self.NBits) + "-qubit " + cont + type(self).__name__ + " Gate, Matrix:\n\r"
+        stri = str(self.NBits) + "-qubit " + cont + inv + type(self).__name__ + " Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
+        
+    def H(self):
+        """ Return an inverse copy of self, i.e. a gate whose matrix representation is 
+            the Hermitian adjoint of self.matrix.
+    
+        Returns
+        ----------
+        gate : genericGate-type Object
+            The gate performing the inverse operation of self.
+        
+        """
+        gate = (type(self))(self.NBits)
+        gate.matrix = np.array(np.asmatrix(self.matrix).H)
+        gate.isInverse = not self.isInverse
+        
+        return gate
     
     def addControlBits(self, NControlBits):
         """ Add control bits to this single bit gate. This is an in-place operation. 
