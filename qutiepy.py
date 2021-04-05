@@ -536,6 +536,22 @@ class identity(genericGate):
     def __init__(self, NBits):
         super(identity, self).__init__(NBits)
         self.matrix = np.eye(2**NBits)
+
+class QFT(genericGate):
+    """ A callable quantum Fourier transform (QFT) gate object.
+    
+    Parameters
+    ----------
+    NBits : int
+        Number of bits that the gate takes as input/output.
+    
+    omega : complex
+        
+    
+    """
+    def __init__(self, NBits):
+        super(QFT, self).__init__(NBits)
+        self.matrix = _QFTMatrix(2**NBits)
         
 class parallelGate(genericGate):   # test me
     """ A gate class to combine gates in parallel.
@@ -625,8 +641,19 @@ def _toControlled(gate):    # Not working, addControlBits seems to work.
     
     return controlled
 
+def _QFTMatrix(N):
+    omg = np.e ** (2*1j*np.pi/N)
+    matrix = np.zeros((N,N), dtype=complex)
+    for x in range(N):
+        for y in range(N):
+            matrix[x,y] = omg ** (x*y)
+    
+    return matrix / np.sqrt(N)
+
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
+    
+    
     
     
     
