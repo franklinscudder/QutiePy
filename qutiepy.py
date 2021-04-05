@@ -207,7 +207,7 @@ class register:
 
 def prod(regA, regB):
     """ 'Join' two registers into a single larger register with regA at the MSB and regB at the LSB 
-    by performing the tensor product between their state vectors \|A>\|B> = \|AB>. 
+    by performing the Kronecker product between their state vectors \|A>\|B> = \|AB>. 
     
     Parameters
     ----------
@@ -652,15 +652,15 @@ def _toNBitMatrix(m, NBits, skipBits=[]):
 
     return mOut
 
-def _toControlled(gate):    # Not working, addControlBits seems to work.
-    rootGate = genericGate(2)
-    rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
-    rootGateT = genericGate(2)
-    rootGateT.matrix = np.kron(np.eye(2), np.array(np.asmatrix(sp.sqrtm(gate.matrix)).H))
-    cn = cNot()
-    controlled = cn(rootGateT(cn(rootGate)))
+# def _toControlled(gate):    # Not working, addControlBits seems to work.
+    # rootGate = genericGate(2)
+    # rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
+    # rootGateT = genericGate(2)
+    # rootGateT.matrix = np.kron(np.eye(2), np.array(np.asmatrix(sp.sqrtm(gate.matrix)).H))
+    # cn = cNot()
+    # controlled = cn(rootGateT(cn(rootGate)))
     
-    return controlled
+    # return controlled
 
 def _QFTMatrix(N):
     omg = np.e ** (2*1j*np.pi/N)
@@ -674,7 +674,7 @@ def _QFTMatrix(N):
 
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
-    
+   
     
     
     
