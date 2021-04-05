@@ -577,6 +577,26 @@ class parallelGate(genericGate):   # test me
         
         self.matrix = matrix
 
+def serialGates(gates):
+    """ Combine an iterable of gate objects in series.
+    
+    Parameters
+    ----------
+    gates : iterable of gate objects
+        The gate objects to be combined in serial. The operator to be applied first should be at index 0.
+    
+    Returns
+    ----------
+    comp : compoundGate object
+        The result of combining the supplied operators in series.
+        
+    """
+    comp = gates[0]
+    for g in gates[1:]:
+        comp = g(comp)
+    
+    return comp
+
 def setSeed(seed):
     """ Set the RNG seed for reproducibility.
     
@@ -598,6 +618,7 @@ def setSeed(seed):
     random.seed(seed)
     return True
     
+    
 
 def _checkNBits(NBits):
     """ Validate the NBits input. """
@@ -610,7 +631,7 @@ def _checkNBits(NBits):
     if NBits > 12:
         warnings.warn("Using more than ~12 qubits in a gate or register will use a lot of resources and is not recommended!")
 
-def _toNBitMatrix(m, NBits, skipBits=[]):   ## TEST BIT SKIPPING
+def _toNBitMatrix(m, NBits, skipBits=[]):   
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
     
     if skipBits != []:
@@ -649,9 +670,11 @@ def _QFTMatrix(N):
             matrix[x,y] = omg ** (x*y)
     
     return matrix / np.sqrt(N)
+    
 
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
+    
     
     
     
