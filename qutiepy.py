@@ -92,7 +92,7 @@ class register:
                 raise TypeError("fmt must be a string")
                 
             if fmt not in ["hex","bin","int"]:
-                raise ValueError("Format must be one of 'hex','bin' or 'int'"
+                raise ValueError("Format must be one of 'hex','bin' or 'int'")
                 
             if fmt == "int":
                 return choice
