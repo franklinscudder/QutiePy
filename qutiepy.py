@@ -285,7 +285,9 @@ class genericGate:
     
     NControlBits : bool
         Indicates whether a control bit has been added using .addControlBits().
-
+        
+    isInverse : bool
+        Indicates whether the object has been created by a call to H().
     """
     def __init__(self, NBits):
         _checkNBits(NBits)
@@ -326,6 +328,16 @@ class genericGate:
         stri = str(self.NBits) + "-qubit " + cont + inv + type(self).__name__ + " Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
+    
+    def inverse(self):
+        """ Alias of self.H().
+    
+        See Also
+        ----------
+        genericGate.H : This method maps to self.H()
+        
+        """
+        return self.H()
         
     def H(self):
         """ Return an inverse copy of self, i.e. a gate whose matrix representation is 
@@ -337,7 +349,11 @@ class genericGate:
             The gate performing the inverse operation of self.
         
         """
-        gate = (type(self))(self.NBits)
+        try:
+            gate = (type(self))(self.NBits)
+        except:
+            gate = genericGate(self.NBits)
+            
         gate.matrix = np.array(np.asmatrix(self.matrix).H)
         gate.isInverse = not self.isInverse
         
@@ -674,7 +690,7 @@ def _QFTMatrix(N):
 
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
-   
+
     
     
     
