@@ -50,7 +50,7 @@ class register:
         """
         return np.array([abs(i)**2 for i in self.amps])
     
-    def observe(self, bit=-1, collapseStates=True):
+    def observe(self, bit=-1, collapseStates=True, fmt="int"):
         """ 'Observe' the register and return an integer representation of the
             observed state according to the probability amplitudes.
             
@@ -69,9 +69,12 @@ class register:
                 Flag to set whether probability amplitudes will be affected by this
                 observation.
             
+            fmt : string, optional
+                One of "int" (default), "bin" or "hex"
+            
             Returns
             ----------
-            state : int
+            state : int or string
                 The observed state of the register or bit.
         """
         if bit == -1:
@@ -82,8 +85,18 @@ class register:
                 amps = [0]*self.NStates
                 amps[choice] = 1
                 self.setAmps(amps)
-        
-            return choice
+            
+            try:
+                fmt = fmt.lower()
+            except:
+                raise TypeError("fmt must be a string")
+                
+            if fmt == "int":
+                return choice
+            if fmt == "bin":
+                return f'{0:0{self.NBits}b}'.format(choice)
+            if fmt == "hex":
+                return hex(choice)
             
         else:
             if bit > self.NBits - 1:
@@ -690,6 +703,8 @@ def _QFTMatrix(N):
 
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
+    r = register(4)
+    print(r.observe(fmt="binary"))
 
     
     
