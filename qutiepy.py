@@ -361,7 +361,7 @@ class genericGate:
     
         Returns
         ----------
-        gate : genericGate-type Object
+        gate : Gate Object
             The gate performing the inverse operation of self.
         
         """
@@ -707,7 +707,7 @@ def _QFTMatrix(N):
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
     r = register(4)
-    print(r.observe(fmt="binary"))
+    print(r.observe(fmt="hex"))
 
     
     
