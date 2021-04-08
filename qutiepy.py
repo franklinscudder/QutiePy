@@ -375,33 +375,70 @@ class genericGate:
         
         return gate
     
-    def addControlBits(self, NControlBits):
-        """ Add control bits to this single bit gate. This is an in-place operation. 
+    def addControlBits(self, controlOffsets):
+        """ Add control bits to this single bit gate.  
     
         Parameters
         ----------
         
-        NControlBits : int
-            The number of control bits to add to the gate.
+        controlOffsets : array of int != 0
+            The bit index offsets relative to this gate to control off of.
     
         Returns
         ----------
-        result : bool
-            True if successful.
+        result : gate object
+            The resulting controlled gate.
         
         """
         if self.NBits != 1:
             raise ValueError("Control bits can only be added to single-bit gates")
         
-        self.NBits += NControlBits
-        NStates = 2 ** self.NBits
-        oldMatrix = self.matrix
+        if not all([type(i) == int for i in controlOffsets]):
+            raise TypeError("Elements of controlOffsets must be integers.")
         
-        self.matrix = np.eye(NStates)
-        self.matrix[NStates-2:NStates, NStates-2:NStates] = oldMatrix
+        if not all([i != 0 for i in controlOffsets]):
+            raise ValueError("Elements of controlOffsets must be non-zero.")
         
-        self.NControlBits = NControlBits
-        return True
+        positives = [i for i in controlOffsets if i > 0]
+        negatives = [i for i in controlOffsets if i < 0]
+        
+        matrix = np.copy(self.matrix)
+        
+        if positives:
+            for i in range(1, max(positives) + 1):
+                
+                if i in positives:
+                    mat_ = np.copy(matrix)
+                    shape_ = mat_.shape[0]
+                    matrix = np.eye(shape_*2)
+                    matrix[:-shape_, :-shape_] = mat_
+                else:
+                    matrix = np.kron(matrix, np.eye(2))
+                    
+        if negatives:
+            for i in range(-1, min(negatives) - 1, -1):
+                
+                if i in negatives:
+                    mat_ = np.copy(matrix)
+                    shape_ = mat_.shape[0]
+                    matrix = np.eye(shape_*2)
+                    matrix[shape_:, shape_:] = mat_
+                else:
+                    matrix = np.kron(np.eye(2), matrix)
+        
+        NStates = matrix.shape[0]
+        NBits = round(np.log2(NStates))
+        
+        try:
+            gate = (type(self))(NBits)
+        except:
+            gate = genericGate(NBits)
+        
+        gate.matrix = matrix
+        gate.NControlBits = len(controlOffsets)
+        
+        return gate
+    
 
 class compoundGate(genericGate):
     """ A class returned when gates are compounded. See genericGate attributes.
@@ -706,9 +743,6 @@ def _QFTMatrix(N):
 
 if __name__ == "__main__":
     print("Why are you running the source file as __main__???")
-    r = register(4)
-    print(r.observe(fmt="hex"))
-
     
     
     

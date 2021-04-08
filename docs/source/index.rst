@@ -17,7 +17,7 @@ Reference
 General Notes and Conventions
 ----------------------------------
 - QutiePy assumes that the first bit in a register (reg[0]) is the least significant bit. Thus, if a register is observed as [0,0,1] the resulting output would be 4.
-- For controlled gates, the first bit (LSB) is the control bit.
+- For default controlled gates, the first bit (LSB) is the control bit.
 - The names used in the package use camelCase as much as possible with the caveat that 'N' as in 'number of' is capitalised and treated as a word itself (NBits, NStates).
 - For a pretty representation of a register, just call print(reg).
 - When calling a gate on a register, the result is returned in a new object, the original register is not modified in any way.
