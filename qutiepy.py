@@ -421,7 +421,7 @@ class genericGate:
                 if i in negatives:
                     mat_ = np.copy(matrix)
                     shape_ = mat_.shape[0]
-                    matrix = np.eye(shape_*2)
+                    matrix = np.eye(shape_*2, dtype=complex)
                     matrix[shape_:, shape_:] = mat_
                 else:
                     matrix = np.kron(np.eye(2), matrix)
