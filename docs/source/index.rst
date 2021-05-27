@@ -37,7 +37,8 @@ General Notes and Conventions
 - Gates can be compounded is series as a new object. ``a(b(c))`` will return a compoundGate object if a, b and c are gates.
 - If reproducability is required, setSeed() can be used to set the RNG seed to a given string so that each run will produce the same results.
 
-
+QutiePy
+--------------------------
 
 .. automodule:: qutiepy
    :members:
