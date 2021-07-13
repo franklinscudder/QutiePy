@@ -1,3 +1,7 @@
+
+import sys
+sys.path.insert(0,'..')    ### TEMPORARY!!!!!
+
 from qutiepy import *
 from random import randint
 from math import gcd, log2, ceil
@@ -5,7 +9,7 @@ from copy import deepcopy
 
 ########### Quantum Part #####################
 
-def makeFxGate(a, q, N):
+def makeFxGate(a, q, r, N):     # Performs (a * x) % N, where x.NBits = q
     matrix = np.zeros((2**q, 2**q))
     for inp in range(2**q):
         out = (a * inp) % N
@@ -16,17 +20,51 @@ def makeFxGate(a, q, N):
     
     return gate
 
-def shor(a, q, N):
-    reg = register(q)
+def makeFxCircuit(a, q, r, N):
+    gates = []
+    
+    for i in range(q):
+        gate = makeFxGate(a, q, r, N)
+        
+        exp = 2**i
+        for j in range(exp - 1):
+            gate = gate(gate)
+        
+        print(q - i)
+        gate.addControlBits([q - i])
+        _gates = [gate, identity(i)] if i else [gate]
+        gate = parallelGate(_gates)
+    
+        gates.append(gate)
+    
+    print(q + r)
+    print([g.NBits for g in gates])
+    return serialGate(gates)
+
+def shor(a, q, r, N):
+    outReg = register(q)
     had_q = hadamard(q)
     
-    reg = had_q(reg)
+    outReg = had_q(outReg)
+    
+    inReg = register(r).setAmps([0, 1] + ([0]*((2**r)-2)))
+    
+    U = makeFxCircuit(a, q, r, N)
+    
+    qft = parallelGate([QFT(q), identity(r)])
+    
+    reg = prod(outReg, inReg)
+    
+    out = qft(U(reg))
+    
+    print(out.observe())
     
     
 
 ############ Classical Part ##################
 
-N = 3 * 5
+N = 2 * 3
+r = ceil(log2(N))
 
 Qmax = 2 * N * N
 q = ceil(log2(Qmax))
@@ -39,6 +77,6 @@ if K != 1:
     quit()
 
 else:
-    r = shor(a, q, N)
-    makeFxGate(a, q, N)
+    res = shor(a, q, r, N)
+    makeFxGate(a, q, r, N)
 
