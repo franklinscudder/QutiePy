@@ -4,10 +4,22 @@ qutiepy.py
 The main file containing the core components of QutiePy, including classes for gates and the register class as well as a 
 few functions which handle on gate and register objects:
 """
+
 import numpy as np
 import scipy.linalg as sp
 import random
 import warnings
+
+"""
+TODO:
+
+ - add control offset to default controlled gates.
+ - check new name conventions.
+ - change MSB convention, should only require changing .observe() et al.
+ - update docs to represent new changes
+ - reversion, release...
+ 
+ """
 
 class Register:
     """
