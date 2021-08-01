@@ -1,5 +1,6 @@
 Welcome to QutiePy!
 =======================================
+[![Downloads](https://pepy.tech/badge/qutiepy)](https://pepy.tech/project/qutiepy)
 
 Package Description
 =====================
