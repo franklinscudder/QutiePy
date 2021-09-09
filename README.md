@@ -1,9 +1,10 @@
 Welcome to QutiePy!
 =======================================
 [![Downloads](https://pepy.tech/badge/qutiepy)](https://pepy.tech/project/qutiepy)
-[![PyPi version](https://badgen.net/pypi/v/pip/)](https://pypi.com/qutiepy/pip)
+[![Documentation Status](https://readthedocs.org/projects/qutiepy/badge/?version=latest)](http://qutiepy.readthedocs.io/?badge=latest)
 [![PyPi license](https://badgen.net/pypi/license/pip/)](https://pypi.com/qutiepy/pip/)
-[![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
+[![PyPi version](https://badgen.net/pypi/v/qutiepy/)](https://pypi.com/project/qutiepy)
+[![PyPI status](https://img.shields.io/pypi/status/qutiepy.svg)](https://pypi.python.org/pypi/qutiepy/)
 
 Package Description
 =====================
