@@ -732,16 +732,6 @@ def _to_N_bit_matrix(m, N_bits, skipBits=[]):
 
     return mOut
 
-# def _toControlled(gate):    # Not working, add_control_bits seems to work.
-    # rootGate = GenericGate(2)
-    # rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
-    # rootGateT = GenericGate(2)
-    # rootGateT.matrix = np.kron(np.eye(2), np.array(np.asmatrix(sp.sqrtm(gate.matrix)).H))
-    # cn = CNot()
-    # controlled = cn(rootGateT(cn(rootGate)))
-    
-    # return controlled
-
 def _QFT_matrix(N):
     omg = np.e ** (2*1j*np.pi/N)
     matrix = np.zeros((N,N), dtype=complex)
