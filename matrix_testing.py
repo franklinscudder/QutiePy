@@ -5,7 +5,7 @@ from scipy.linalg import block_diag
 
 sys.path.insert(0, "..")
 
-from qutiepy_new_naming_convention import *
+from qutiepy import *
 
 # swap on LSBs controlled by MSB
 

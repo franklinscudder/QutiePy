@@ -1,7 +1,3 @@
-
-import sys
-sys.path.insert(0,'..')    ### TEMPORARY!!!!!
-
 from qutiepy import *
 from random import randint
 from math import gcd, log2, ceil

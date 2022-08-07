@@ -12,7 +12,7 @@ class testRegisterClass(unittest.TestCase):
             qu.register(-1)
         
         with self.assertRaises(ValueError):
-            qu.register("WhyAreYouReadingTestScripts?")
+            qu.register("FOOBARBAZ")
         
         r = qu.register(4)
         self.assertEqual(r.NBits, 4)

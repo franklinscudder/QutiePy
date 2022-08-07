@@ -22,7 +22,7 @@ cn = qu.cNot()
 r1 = h(r1)
 
 # 'Join' the two bits together into a single register
-r = qu.prod(r1,r2)
+r = qu.prod(r1, r2)
 
 # Apply the CNOT gate to the new register
 r = cn(r)

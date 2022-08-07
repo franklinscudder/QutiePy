@@ -4,49 +4,37 @@ qutiepy.py
 The main file containing the core components of QutiePy, including classes for gates and the register class as well as a 
 few functions which handle on gate and register objects:
 """
-
 import numpy as np
 import scipy.linalg as sp
 import random
 import warnings
 
-"""
-TODO:
-
- - add control offset to default controlled gates.
- - check new name conventions.
- - change MSB convention, should only require changing .observe() et al.
- - update docs to represent new changes
- - reversion, release...
- 
- """
-
-class Register:
+class register:
     """
     N-bit quantum register. The initial state is (1+0j)|0>.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Size of the register in bits.
 
     Attributes
     ----------
-    N_bits : int
+    NBits : int
         Number of bits in the register.
     
-    N_states : int
-        Number of states the register can occupy (2^N_bits).
+    NStates : int
+        Number of states the register can occupy (2^NBits).
     
     amps : list
         The complex probability amplitudes of each state of the register.
 
     """
-    def __init__(self, N_bits):
-        _check_N_bits(N_bits)
-        self.N_bits = N_bits
-        self.N_states = 2 ** N_bits
-        self.amps = np.zeros(self.N_states, dtype=np.dtype(complex))
+    def __init__(self, NBits):
+        _checkNBits(NBits)
+        self.NBits = NBits
+        self.NStates = 2 ** NBits
+        self.amps = np.zeros(self.NStates, dtype=np.dtype(complex))
         self.amps[0] = 1 + 0j
     
     def probabilities(self):
@@ -88,12 +76,12 @@ class Register:
         """
         if bit == -1:
             probs = self.probabilities()
-            choice = random.choices(range(self.N_states), probs)[0]
+            choice = random.choices(range(self.NStates), probs)[0]
 
             if collapseStates:
-                amps = [0]*self.N_states
+                amps = [0]*self.NStates
                 amps[choice] = 1
-                self.set_amps(amps)
+                self.setAmps(amps)
             
             try:
                 fmt = fmt.lower()
@@ -106,23 +94,23 @@ class Register:
             if fmt == "int":
                 return choice
             if fmt == "bin":
-                return f'{0:0{self.N_bits}b}'.format(choice)
+                return f'{0:0{self.NBits}b}'.format(choice)
             if fmt == "hex":
                 return hex(choice)
             
         else:
-            if bit > self.N_bits - 1:
-                raise IndexError("Value of 'bit' cannot be greater than self.N_bits.")
+            if bit > self.NBits - 1:
+                raise IndexError("Value of 'bit' cannot be greater than self.NBits.")
             probs = self.probabilities()
-            bitProbs = [sum([probs[i] for i in range(self.N_states) if format(i, f"0{self.N_bits}b")[-bit] == "0"]), sum([probs[i] for i in range(self.N_states) if format(i, f"0{self.N_bits}b")[-bit] == "1"])]
+            bitProbs = [sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "0"]), sum([probs[i] for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] == "1"])]
             bitChoice = random.choices([0,1], bitProbs)[0]
             
             if collapseStates:
                 amps = self.amps
-                zeroIndices = [i for i in range(self.N_states) if format(i, f"0{self.N_bits}b")[-bit] != str(bitChoice)]
+                zeroIndices = [i for i in range(self.NStates) if format(i, f"0{self.NBits}b")[-bit] != str(bitChoice)]
                 for i in zeroIndices:
                     amps[i] = 0.0+0.0j
-                self.set_amps(amps)
+                self.setAmps(amps)
                 
             return bitChoice
     
@@ -150,7 +138,7 @@ class Register:
             ----------
             prod : Equivalent function
         """
-        result = Register(self.N_bits + B.N_bits)
+        result = register(self.NBits + B.NBits)
         result.amps = np.kron(self.amps, B.amps)    
         return result
     
@@ -168,7 +156,7 @@ class Register:
             The angle phi = Ln[(amps[1]+eps)/(sin(theta/2)+eps)].
         
         """
-        if self.N_bits != 1:
+        if self.NBits != 1:
             raise ValueError("bloch() can only be called on 1-bit registers.")
 
         theta = 2 * np.arccos(self.amps[0])
@@ -188,7 +176,7 @@ class Register:
         
         return np.real(density)
     
-    def reduced_purities(self):
+    def reducedPurities(self):
         """ Return the reduced purity of each bit of the register, i.e.:
             Tr[Tr_i(D)^2]
             where D is the full density matrix of the register and Tr_i is 
@@ -201,12 +189,12 @@ class Register:
         """
         d = self.density()
         purities = []
-        idxs = list(range(self.N_bits))
+        idxs = list(range(self.NBits))
 
         for i in idxs:
             theseidxs = idxs.copy()
             theseidxs.remove(i)
-            pt = _partial_trace(d, theseidxs , [2]*(self.N_bits), True)
+            pt = _partial_trace(d, theseidxs , [2]*(self.NBits), True)
             pt2 = np.matmul(pt,pt)
             purities.append(round(np.trace(pt2),8))
             # round used to reduce precision and remove small errors
@@ -214,7 +202,7 @@ class Register:
 
         return np.array(purities)
     
-    def set_amps(self, amps):
+    def setAmps(self, amps):
         """ Manually set the qubit probability amplitudes in-place, ensuring they remain properly normalised. 
         
         Parameters
@@ -222,8 +210,8 @@ class Register:
         amps : iterable
             The relative complex amplitudes to be applied to the register with normalisation.
         """
-        if len(amps) != self.N_states:
-            raise ValueError("Length of iterable 'amps' must be equal to N_states.")
+        if len(amps) != self.NStates:
+            raise ValueError("Length of iterable 'amps' must be equal to NStates.")
         
         probs = np.array([abs(i)**2 for i in amps])
         self.amps = np.array(amps,  dtype=np.dtype(complex)) / sum(probs)**0.5
@@ -236,22 +224,22 @@ def prod(regA, regB):
     
     Parameters
     ----------
-    regA : Register
+    regA : register
         The register to be placed at the MSB.
     
-    regB : Register
+    regB : register
         The register to be placed at the LSB.
     
     Returns
     ----------
-    result : Register
+    result : register
         The resulting joined register.
         
     See Also
     ----------
-    Register.prod : Equivalent class method.
+    register.prod : Equivalent class method.
     """
-    result = Register(regA.N_bits + regB.N_bits)
+    result = register(regA.NBits + regB.NBits)
     result.amps = np.kron(regA.amps, regB.amps)  
     return result
 
@@ -291,47 +279,47 @@ def _partial_trace(rho, keep, dims, optimize=False):
     rho_a = np.einsum(rho_a, idx1+idx2, optimize=optimize)
     return rho_a.reshape(Nkeep, Nkeep)
 
-class GenericGate:
+class genericGate:
     """
     Base class for callable quantum logic gates.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Size of the registers that the gate will take as input/output.
 
     Attributes
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
     
     matrix : 2D numpy array
-        The 2^N_bits by 2^N_bits matrix representation of the gate.
+        The 2^NBits by 2^NBits matrix representation of the gate.
     
     NControlBits : bool
-        Indicates whether a control bit has been added using .add_control_bits().
+        Indicates whether a control bit has been added using .addControlBits().
         
     isInverse : bool
         Indicates whether the object has been created by a call to H().
     """
-    def __init__(self, N_bits):
-        _check_N_bits(N_bits)
-        self.N_bits = N_bits
-        self.matrix = np.identity(2 ** N_bits)
+    def __init__(self, NBits):
+        _checkNBits(NBits)
+        self.NBits = NBits
+        self.matrix = np.identity(2 ** NBits)
         self.NControlBits = 0
         self.isInverse = False
     
     def __call__(self, arg):
-        if issubclass(type(arg), GenericGate):
-            if arg.N_bits != self.N_bits:
-                raise ValueError("Gates to be compounded must have the same N_bits.")
+        if issubclass(type(arg), genericGate):
+            if arg.NBits != self.NBits:
+                raise ValueError("Gates to be compounded must have the same NBits.")
             
-            out = CompoundGate(self.N_bits)
+            out = compoundGate(self.NBits)
             out.matrix = np.matmul(self.matrix, arg.matrix)
             return out
 
-        elif type(arg) == Register:
-            result = Register(arg.N_bits)
+        elif type(arg) == register:
+            result = register(arg.NBits)
             result.amps = np.matmul(self.matrix, arg.amps)
             return result
         
@@ -350,7 +338,7 @@ class GenericGate:
         else:
             inv = ""
         
-        stri = str(self.N_bits) + "-qubit " + cont + inv + type(self).__name__ + " Gate, Matrix:\n\r"
+        stri = str(self.NBits) + "-qubit " + cont + inv + type(self).__name__ + " Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
     
@@ -359,7 +347,7 @@ class GenericGate:
     
         See Also
         ----------
-        GenericGate.H : This method maps to self.H()
+        genericGate.H : This method maps to self.H()
         
         """
         return self.H()
@@ -375,16 +363,16 @@ class GenericGate:
         
         """
         try:
-            gate = (type(self))(self.N_bits)
+            gate = (type(self))(self.NBits)
         except:
-            gate = GenericGate(self.N_bits)
+            gate = genericGate(self.NBits)
             
         gate.matrix = np.array(np.asmatrix(self.matrix).H)
         gate.isInverse = not self.isInverse
         
         return gate
     
-    def add_control_bits(self, controlOffsets):
+    def addControlBits(self, controlOffsets):
         """ Add control bits to this single bit gate.  
     
         Parameters
@@ -399,7 +387,7 @@ class GenericGate:
             The resulting controlled gate.
         
         """
-        #if self.N_bits != 1:
+        #if self.NBits != 1:
             #raise ValueError("Control bits can only be added to single-bit gates")
         
         if not all([type(i) == int for i in controlOffsets]):
@@ -420,9 +408,7 @@ class GenericGate:
                     mat_ = np.copy(matrix)
                     shape_ = mat_.shape[0]
                     matrix = np.eye(shape_*2)
-                    with warnings.catch_warnings():
-                        warnings.filterwarnings('ignore')
-                        matrix[:-shape_, :-shape_] = mat_
+                    matrix[:-shape_, :-shape_] = mat_
                 else:
                     matrix = np.kron(matrix, np.eye(2))
                     
@@ -437,13 +423,13 @@ class GenericGate:
                 else:
                     matrix = np.kron(np.eye(2), matrix)
         
-        N_states = matrix.shape[0]
-        N_bits = int(round(np.log2(N_states))) ## int?
+        NStates = matrix.shape[0]
+        NBits = int(round(np.log2(NStates))) ## int?
         
         try:
-            gate = (type(self))(N_bits)
+            gate = (type(self))(NBits)
         except:
-            gate = GenericGate(N_bits)
+            gate = genericGate(NBits)
         
         gate.matrix = matrix
         gate.NControlBits = len(controlOffsets)
@@ -451,41 +437,41 @@ class GenericGate:
         return gate
     
 
-class CompoundGate(GenericGate):
-    """ A class returned when gates are compounded. See GenericGate attributes.
+class compoundGate(genericGate):
+    """ A class returned when gates are compounded. See genericGate attributes.
     """
     
     
-    def __init__(self, N_bits):
-        super(CompoundGate, self).__init__(N_bits)
+    def __init__(self, NBits):
+        super(compoundGate, self).__init__(NBits)
     
     def __str__(self):
-        stri = str(self.N_bits) + "-qubit Compound Gate, Matrix:\n\r"
+        stri = str(self.NBits) + "-qubit Compound Gate, Matrix:\n\r"
         stri = stri + self.matrix.__str__()
         return stri
         
 
-class Hadamard(GenericGate):
-    """ A callable Hadamard gate object. 
+class hadamard(genericGate):
+    """ A callable hadamard gate object. 
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
         
     skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, skipBits = []):
-        super(Hadamard, self).__init__(N_bits)
-        self.matrix = _to_N_bit_matrix(sp.hadamard(2) * (2**(-0.5)), N_bits, skipBits)
+    def __init__(self, NBits, skipBits = []):
+        super(hadamard, self).__init__(NBits)
+        self.matrix = _toNBitMatrix(sp.hadamard(2) * (2**(-0.5)), NBits, skipBits)
 
-class Phase(GenericGate):
+class phaseShift(genericGate):
     """ A callable phase-shift gate object. 
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
     
     phi : float
@@ -494,146 +480,146 @@ class Phase(GenericGate):
     skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, phi, skipBits=[]):
-        super(Phase, self).__init__(N_bits)
+    def __init__(self, NBits, phi, skipBits=[]):
+        super(phaseShift, self).__init__(NBits)
         singleMatrix = np.array([[1,0],[0,np.exp(phi * 1j)]])
-        self.matrix = _to_N_bit_matrix(singleMatrix, N_bits, skipBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits)
 
-class PauliX(GenericGate):
+class pauliX(genericGate):
     """ A callable Pauli-X gate object, AKA the quantum NOT gate.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
      
     skipBits : list of int, optional
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, skipBits=[]):
-        super(PauliX, self).__init__(N_bits)
+    def __init__(self, NBits, skipBits=[]):
+        super(pauliX, self).__init__(NBits)
         singleMatrix = np.array([[0,1],[1,0]])    
-        self.matrix = _to_N_bit_matrix(singleMatrix, N_bits, skipBits)
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits)
 
-class PauliY(GenericGate):
+class pauliY(genericGate):
     """ A callable Pauli-Y gate object. 
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
        
     skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, skipBits=[]):
-        super(PauliY, self).__init__(N_bits)
+    def __init__(self, NBits, skipBits=[]):
+        super(pauliY, self).__init__(NBits)
         singleMatrix = np.array([[0,-1j],[1j,0]])    
-        self.matrix = _to_N_bit_matrix(singleMatrix, N_bits, skipBits) 
+        self.matrix = _toNBitMatrix(singleMatrix, NBits, skipBits) 
 
-class PauliZ(Phase):
+class pauliZ(phaseShift):
     """ A callable Pauli-Z gate object. 
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
        
     skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, skipBits=[]):
-        super(PauliZ, self).__init__(N_bits, np.pi, skipBits)
+    def __init__(self, NBits, skipBits=[]):
+        super(pauliZ, self).__init__(NBits, np.pi, skipBits)
 
-class CNot(GenericGate):
+class cNot(genericGate):
     """ A callable CNOT gate object. 
     
     The first bit (LSB) in the register on which this gate is called is the control bit.
     """ 
     
     def __init__(self):     # (first bit is the control bit)
-        super(CNot, self).__init__(2)   
+        super(cNot, self).__init__(2)   
         self.matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
 
-class CCNot(GenericGate):
+class ccNot(genericGate):
     """ A callable CCNOT (Toffoli) gate object.
     
     The first two bits (LSBs) in the register on which this gate is called are the control bits. 
     """
     def __init__(self):
-        super(CCNot, self).__init__(3)
+        super(ccNot, self).__init__(3)
         self.matrix = np.eye(8)
         self.matrix[6:8, 6:8] = np.array([[0,1],[1,0]])
 
-class Swap(GenericGate):
+class swap(genericGate):
     """ A callable SWAP gate object. For two qubits in a register (A,B), outputs (B,A).
     """
     def __init__(self):
-        super(Swap, self).__init__(2)
+        super(swap, self).__init__(2)
         self.matrix = np.eye(4)
         self.matrix[1:3, 1:3] = np.array([[0,1],[1,0]])
 
-class SqrtSwap(GenericGate):
+class sqrtSwap(genericGate):
     """ A callable sqrt(SWAP) gate object.
     """
     def __init__(self):
-        super(SqrtSwap, self).__init__(2)
+        super(sqrtSwap, self).__init__(2)
         self.matrix = np.eye(4)
         self.matrix[1:3, 1:3] = np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]])
 
-class SqrtNot(GenericGate):
+class sqrtNot(genericGate):
     """ A callable sqrt(not) or sqrt(Pauli-X) gate object.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
        
     skipBits : list of int, optional, deprecated
         Indices of bits in a register that this gate will not operate on.
     """
-    def __init__(self, N_bits, skipBits=[]):
-        super(SqrtNot, self).__init__(N_bits)
-        self.matrix = _to_N_bit_matrix(np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]]), N_bits, skipBits)
+    def __init__(self, NBits, skipBits=[]):
+        super(sqrtNot, self).__init__(NBits)
+        self.matrix = _toNBitMatrix(np.array([[0.5+0.5j,0.5-0.5j],[0.5-0.5j,0.5+0.5j]]), NBits, skipBits)
 
-class Fredkin(GenericGate):
+class fredkin(genericGate):
     """ A callable Fredkin (CCSWAP) gate object.
     """
     def __init__(self):
-        super(Fredkin, self).__init__(3)
+        super(fredkin, self).__init__(3)
         self.matrix = np.eye(8)
         self.matrix[5:7,5:7] = np.array([[0,1],[1,0]])
         
-class Identity(GenericGate):
+class identity(genericGate):
     """ A callable identity gate object.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
     
     """
-    def __init__(self, N_bits):
-        super(Identity, self).__init__(N_bits)
-        self.matrix = np.eye(2**N_bits)
+    def __init__(self, NBits):
+        super(identity, self).__init__(NBits)
+        self.matrix = np.eye(2**NBits)
 
-class QFT(GenericGate):
+class QFT(genericGate):
     """ A callable quantum Fourier transform (QFT) gate object.
     
     Parameters
     ----------
-    N_bits : int
+    NBits : int
         Number of bits that the gate takes as input/output.
     
     omega : complex
         
     
     """
-    def __init__(self, N_bits):
-        super(QFT, self).__init__(N_bits)
-        self.matrix = _QFT_matrix(2**N_bits)
+    def __init__(self, NBits):
+        super(QFT, self).__init__(NBits)
+        self.matrix = _QFTMatrix(2**NBits)
         
-class ParallelGate(GenericGate):   # test me
+class parallelGate(genericGate):   # test me
     """ A gate class to combine gates in parallel.
     
     Parameters
@@ -645,11 +631,11 @@ class ParallelGate(GenericGate):   # test me
     """
     def __init__(self, gates):
         try:
-            self.N_bits = sum([g.N_bits for g in gates])
+            self.NBits = sum([g.NBits for g in gates])
         except:
             raise TypeError("gates must be an iterable of gate objects.")
             
-        super(ParallelGate, self).__init__(self.N_bits)
+        super(parallelGate, self).__init__(self.NBits)
         
         matrix = gates[0].matrix
         for gate in gates[1:]:
@@ -657,7 +643,7 @@ class ParallelGate(GenericGate):   # test me
         
         self.matrix = matrix
 
-def serial_gate(gates):
+def serialGate(gates):
     """ Combine an iterable of gate objects in series.
     
     Parameters
@@ -667,7 +653,7 @@ def serial_gate(gates):
     
     Returns
     ----------
-    comp : CompoundGate object
+    comp : compoundGate object
         The result of combining the supplied operators in series.
         
     """
@@ -677,7 +663,7 @@ def serial_gate(gates):
     
     return comp
 
-def set_seed(seed):
+def setSeed(seed):
     """ Set the RNG seed for reproducibility.
     
     Parameters
@@ -700,22 +686,22 @@ def set_seed(seed):
     
     
 
-def _check_N_bits(N_bits):
-    """ Validate the N_bits input. """
-    if N_bits < 1:
-        raise ValueError("N_bits must be a positive integer!")
+def _checkNBits(NBits):
+    """ Validate the NBits input. """
+    if NBits < 1:
+        raise ValueError("NBits must be a positive integer!")
     
-    if type(N_bits) != int:
-        raise TypeError("N_bits must be a positive integer!")
+    if type(NBits) != int:
+        raise TypeError("NBits must be a positive integer!")
     
-    if N_bits > 12:
+    if NBits > 12:
         warnings.warn("Using more than ~12 qubits in a gate or register will use a lot of resources and is not recommended!")
 
-def _to_N_bit_matrix(m, N_bits, skipBits=[]):   
+def _toNBitMatrix(m, NBits, skipBits=[]):   
     """ Take a single-bit matrix of a gate and return the NBit equivalent matrix. """
     
     if skipBits != []:
-        raise DeprecationWarning("Using skipBits is no longer recommended, use ParallelGate to combine identity gates with your desired operator.")
+        raise DeprecationWarning("Using skipBits is no longer recommended, use parallelGate to combine identity gates with your desired operator.")
             
     I = np.eye(2)
     
@@ -724,7 +710,7 @@ def _to_N_bit_matrix(m, N_bits, skipBits=[]):
     else:
         mOut = m
     
-    for i in range(1, N_bits):
+    for i in range(1, NBits):
         if i in skipBits:
             mOut = np.kron(I, mOut)
         else:
@@ -732,7 +718,17 @@ def _to_N_bit_matrix(m, N_bits, skipBits=[]):
 
     return mOut
 
-def _QFT_matrix(N):
+# def _toControlled(gate):    # Not working, addControlBits seems to work.
+    # rootGate = genericGate(2)
+    # rootGate.matrix = np.kron(np.eye(2), sp.sqrtm(gate.matrix)) # single bit gate
+    # rootGateT = genericGate(2)
+    # rootGateT.matrix = np.kron(np.eye(2), np.array(np.asmatrix(sp.sqrtm(gate.matrix)).H))
+    # cn = cNot()
+    # controlled = cn(rootGateT(cn(rootGate)))
+    
+    # return controlled
+
+def _QFTMatrix(N):
     omg = np.e ** (2*1j*np.pi/N)
     matrix = np.zeros((N,N), dtype=complex)
     for x in range(N):

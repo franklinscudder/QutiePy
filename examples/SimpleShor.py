@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0,'..')    ### TEMPORARY!!!!!
 
-from qutiepy_new_naming_convention import *
+from qutiepy import *
 from math import gcd
 
 """
