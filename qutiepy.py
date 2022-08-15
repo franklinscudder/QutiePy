@@ -6,7 +6,7 @@ few functions which handle on gate and register objects:
 """
 
 import numpy as np
-import scipy.linalg as sp
+import scipy.linalg as linalg
 import random
 import warnings
 
@@ -17,7 +17,6 @@ TODO:
  - check new name conventions.
  - change MSB convention, should only require changing .observe() et al.
  - update docs to represent new changes
- - reversion, release...
  
  """
 
@@ -67,7 +66,7 @@ class Register:
             If a bit argument is supplied, only that bit will be observed and it's
             state returned as an integer (1 or 0).
 
-            If collapseStates=True, adjust the amplitudes to reflect the collapsed
+            If collapseStates=True, adjust the amplitudes in place to reflect the collapsed
             state.
             
             Parameters
@@ -76,7 +75,7 @@ class Register:
                 The index of the bit to be observed.
             
             collapseStates : bool, optional
-                Flag to set whether probability amplitudes will be affected by this
+                Flag to set whether probability amplitudes will be affected in place by this
                 observation.
             
             fmt : string, optional
@@ -211,7 +210,7 @@ class Register:
             pt = _partial_trace(d, theseidxs, [2] * (self.N_bits), True)
             pt2 = np.matmul(pt, pt)
             purities.append(round(np.trace(pt2), 8))
-            # round used to reduce precision and remove small errors
+            # round used to reduce precision and remove small numerical errors
 
         return np.array(purities)
     
@@ -476,7 +475,7 @@ class Hadamard(GenericGate):
     """
     def __init__(self, N_bits, skip_bits=[]):
         super(Hadamard, self).__init__(N_bits)
-        self.matrix = _to_N_bit_matrix(sp.hadamard(2) * (2**(-0.5)), N_bits, skip_bits)
+        self.matrix = _to_N_bit_matrix(linalg.hadamard(2) * (2**(-0.5)), N_bits, skip_bits)
 
 
 class Phase(GenericGate):
@@ -661,7 +660,7 @@ class ParallelGate(GenericGate):   # test me
        
     """
     def __init__(self, gates):
-        if not all(issubclass(g, GenericGate) for g in gates):
+        if not all(issubclass(type(g), GenericGate) for g in gates):
             raise TypeError("gates must be an iterable of gate objects.")
         
         self.N_bits = sum([g.N_bits for g in gates])

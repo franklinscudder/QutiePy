@@ -1,9 +1,10 @@
-from qutiepy import *
+import qutiepy as qu
+import numpy as np
 from random import randint
 from math import gcd, log2, ceil
-from copy import deepcopy
 
 ########### Quantum Part #####################
+
 
 def makeFxGate(a, q, r, N):     # Performs (a * x) % N, where x.NBits = q
     matrix = np.zeros((2**q, 2**q))
@@ -11,10 +12,11 @@ def makeFxGate(a, q, r, N):     # Performs (a * x) % N, where x.NBits = q
         out = (a * inp) % N
         matrix[out, inp] += 1
     
-    gate = genericGate(q)
+    gate = qu.genericGate(q)
     gate.matrix = matrix
     
     return gate
+
 
 def makeFxCircuit(a, q, r, N):
     gates = []
@@ -28,44 +30,44 @@ def makeFxCircuit(a, q, r, N):
         
         print(q - i)
         gate.addControlBits([q - i])
-        _gates = [gate, identity(i)] if i else [gate]
-        gate = parallelGate(_gates)
+        _gates = [gate, qu.Identity(i)] if i else [gate]
+        gate = qu.ParallelGate(_gates)
     
         gates.append(gate)
     
     print(q + r)
     print([g.NBits for g in gates])
-    return serialGate(gates)
+    return qu.serial_gate(gates)
+
 
 def shor(a, q, r, N):
-    outReg = register(q)
-    had_q = hadamard(q)
+    outReg = qu.Register(q)
+    had_q = qu.Hadamard(q)
     
     outReg = had_q(outReg)
     
-    inReg = register(r).setAmps([0, 1] + ([0]*((2**r)-2)))
+    inReg = qu.Register(r).setAmps([0, 1] + ([0] * ((2 ** r) - 2)))
     
     U = makeFxCircuit(a, q, r, N)
     
-    qft = parallelGate([QFT(q), identity(r)])
+    qft = qu.ParallelGate([qu.QFT(q), qu.Identity(r)])
     
-    reg = prod(outReg, inReg)
+    reg = qu.prod(outReg, inReg)
     
     out = qft(U(reg))
     
     print(out.observe())
     
-    
 
 ############ Classical Part ##################
 
-N = 2 * 3
+N = 3 * 7
 r = ceil(log2(N))
 
 Qmax = 2 * N * N
 q = ceil(log2(Qmax))
 
-a = randint(2, N-1)
+a = randint(2, N - 1)
 K = gcd(a, N)
 
 if K != 1:
@@ -75,4 +77,3 @@ if K != 1:
 else:
     res = shor(a, q, r, N)
     makeFxGate(a, q, r, N)
-

@@ -1,7 +1,5 @@
-import sys
-sys.path.insert(0,'..')    ### TEMPORARY!!!!!
-
-from qutiepy import *
+import qutiepy as qu
+import numpy as np
 from math import gcd
 
 """
@@ -19,19 +17,19 @@ if __name__ == "__main__":
     M = 2 ** 3
     x = 11
     
-    reg = Register(5)
-    had1 = ParallelGate([Identity(2), Hadamard(3)])
-    cnot1 = ParallelGate([Identity(1), CNot(), Hadamard(2)])
-    cnot2 = ParallelGate([PauliX(1).add_control_bits([2]), Identity(2)])
-    had2 = ParallelGate([Identity(3), Hadamard(1), Identity(1)])
-    phs1 = ParallelGate([Identity(3), Phase(1, np.pi/2).add_control_bits([-1])])
-    had3 = ParallelGate([Identity(4), Hadamard(1)])
-    phs2 = ParallelGate([Identity(2), Phase(1, np.pi/4).add_control_bits([1]), Identity(1)])
-    phs3 = ParallelGate([Identity(2), Phase(1, np.pi/2).add_control_bits([2])])
+    reg = qu.Register(5)
+    had1 = qu.ParallelGate([qu.Identity(2), qu.Hadamard(3)])
+    cnot1 = qu.ParallelGate([qu.Identity(1), qu.CNot(), qu.Hadamard(2)])
+    cnot2 = qu.ParallelGate([qu.PauliX(1).add_control_bits([2]), qu.Identity(2)])
+    had2 = qu.ParallelGate([qu.Identity(3), qu.Hadamard(1), qu.Identity(1)])
+    phs1 = qu.ParallelGate([qu.Identity(3), qu.Phase(1, np.pi/2).add_control_bits([-1])])
+    had3 = qu.ParallelGate([qu.Identity(4), qu.Hadamard(1)])
+    phs2 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi/4).add_control_bits([1]), qu.Identity(1)])
+    phs3 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi/2).add_control_bits([2])])
     
     all_gates = [had1, cnot1, cnot2, had2, phs1, had3, phs2, phs3]
     
-    shor = serial_gate(all_gates)
+    shor = qu.serial_gate(all_gates)
     
     res = shor(reg)
     
@@ -43,17 +41,15 @@ if __name__ == "__main__":
     print("Period Found:", p)
     
     # Since M = 8, we can conclude that r divides M/p = 8/4 = 2, hence r = 2
-    r = M / p  
+    r = M / p
     
     """
     Then 15 divides
-    (x^r − 1) = (11^2 − 1) = (11 − 1)(11 + 1) = 10 * 12
+    (x^r - 1) = (11^2 - 1) = (11 - 1)(11 + 1) = 10 * 12
     """
     
     xp = x ** p
-    y1 ,y2 = xp - 1, xp + 1
-    factors = gcd(y1, N), gcd(y2, N) 
+    y1, y2 = xp - 1, xp + 1
+    factors = gcd(y1, N), gcd(y2, N)
     
     print("Factors of 15 are:", factors[0], factors[1])
-    
-    
