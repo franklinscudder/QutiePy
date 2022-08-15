@@ -22,10 +22,10 @@ if __name__ == "__main__":
     cnot1 = qu.ParallelGate([qu.Identity(1), qu.CNot(), qu.Hadamard(2)])
     cnot2 = qu.ParallelGate([qu.PauliX(1).add_control_bits([2]), qu.Identity(2)])
     had2 = qu.ParallelGate([qu.Identity(3), qu.Hadamard(1), qu.Identity(1)])
-    phs1 = qu.ParallelGate([qu.Identity(3), qu.Phase(1, np.pi/2).add_control_bits([-1])])
+    phs1 = qu.ParallelGate([qu.Identity(3), qu.Phase(1, np.pi / 2).add_control_bits([-1])])
     had3 = qu.ParallelGate([qu.Identity(4), qu.Hadamard(1)])
-    phs2 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi/4).add_control_bits([1]), qu.Identity(1)])
-    phs3 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi/2).add_control_bits([2])])
+    phs2 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi / 4).add_control_bits([1]), qu.Identity(1)])
+    phs3 = qu.ParallelGate([qu.Identity(2), qu.Phase(1, np.pi / 2).add_control_bits([2])])
     
     all_gates = [had1, cnot1, cnot2, had2, phs1, had3, phs2, phs3]
     

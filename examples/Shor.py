@@ -1,3 +1,10 @@
+"""
+A more general implementation of Shor's algorithm, factoring N.
+
+UNDER DEVELOPMENT, NONFUNCTIONAL!!!
+
+"""
+
 import qutiepy as qu
 import numpy as np
 from random import randint
@@ -12,7 +19,7 @@ def makeFxGate(a, q, r, N):     # Performs (a * x) % N, where x.NBits = q
         out = (a * inp) % N
         matrix[out, inp] += 1
     
-    gate = qu.genericGate(q)
+    gate = qu.GenericGate(q)
     gate.matrix = matrix
     
     return gate
@@ -29,14 +36,14 @@ def makeFxCircuit(a, q, r, N):
             gate = gate(gate)
         
         print(q - i)
-        gate.addControlBits([q - i])
+        gate.add_control_bits([q - i])
         _gates = [gate, qu.Identity(i)] if i else [gate]
         gate = qu.ParallelGate(_gates)
     
         gates.append(gate)
     
     print(q + r)
-    print([g.NBits for g in gates])
+    print([g.N_bits for g in gates])
     return qu.serial_gate(gates)
 
 
@@ -46,7 +53,7 @@ def shor(a, q, r, N):
     
     outReg = had_q(outReg)
     
-    inReg = qu.Register(r).setAmps([0, 1] + ([0] * ((2 ** r) - 2)))
+    inReg = qu.Register(r).set_amps([0, 1] + ([0] * ((2 ** r) - 2)))
     
     U = makeFxCircuit(a, q, r, N)
     
@@ -61,7 +68,7 @@ def shor(a, q, r, N):
 
 ############ Classical Part ##################
 
-N = 3 * 7
+N = 3 * 2
 r = ceil(log2(N))
 
 Qmax = 2 * N * N
@@ -76,4 +83,4 @@ if K != 1:
 
 else:
     res = shor(a, q, r, N)
-    makeFxGate(a, q, r, N)
+    print(res)
